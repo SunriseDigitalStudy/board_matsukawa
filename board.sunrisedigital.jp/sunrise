@@ -1,0 +1,45 @@
+#!/usr/bin/php
+<?php
+/**
+ *
+ *
+ * @author  Masamoto Miyata <miyata@able.ocn.ne.jp>
+ * @create  2009/08/03
+ * @copyright 2007 Sunrise Digital Corporation.
+ * @version  2012/08/15 12:32 Miyata
+ **/
+chdir(dirname(__FILE__).'/');
+
+require_once '../sdx/models/Sdx/Context.php';
+$base = '.';
+
+try
+{
+	$context = Sdx_Context::create('../common', 'Bd_Environment_Cli', array(
+		'base'   => $base,
+		'config' => $base.'/config',
+		'cache'  => $base.'/cache'
+	));
+	
+	$context->dispatch();
+}
+catch(Sdx_Cli_Exception $e)
+{
+	$cm = $e->getTargetObject();
+	echo $e->getMessage().PHP_EOL;
+	echo $cm->getUsage().PHP_EOL;
+}
+catch(Zend_Controller_Exception $e)
+{
+	$prev = $e->getPrevious();
+	if($prev instanceof Sdx_Cli_Exception)
+	{
+		$cm = $prev->getTargetObject();
+		echo $prev->getMessage().PHP_EOL;
+		echo $cm->getUsage().PHP_EOL;
+	}
+	else
+	{
+		 echo  $e->getMessage().PHP_EOL;
+	}
+}

@@ -1,0 +1,8 @@
+database_name:
+  class:    Sdx_Db_Adapter_Mysql
+  host:     localhost
+  username: user_name
+  password: password
+  dbname:   database_name
+  charset:  utf8
+  unix_socket:   /var/lib/mysql/mysql.sock

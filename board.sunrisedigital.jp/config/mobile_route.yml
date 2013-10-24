@@ -1,0 +1,18 @@
+routes:
+  default:
+    route:          /m/:controller/:action/*
+    defaults:
+      module:       mobile
+  
+  default_index:
+    route:          /m/:controller/
+    defaults:
+      module:       mobile
+      action:       index
+
+  index:
+    route:          /m/
+    defaults:
+      module:       mobile
+      controller:   index
+      action:       index

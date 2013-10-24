@@ -1,0 +1,7 @@
+*/tmp/*
+!templates_c
+*/tmp/templates_c/*
+*/log/*
+*/logs/*
+*/cache/*
+!.gitkeep

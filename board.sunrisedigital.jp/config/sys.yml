@@ -1,0 +1,7 @@
+smarty:
+  cache_dir:      %SDX_CONFIG:sys.cache_dir%/smarty
+  templates_dir:  %SDX_CONFIG:sys.base_dir%/tmp/templates_c
+  plugins_dir:    %SDX_CONFIG:sys.sdx_dir%/plugins/smarty
+
+php:
+  - mbstring.internal_encoding:  UTF-8

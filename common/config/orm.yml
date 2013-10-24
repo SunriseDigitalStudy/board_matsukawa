@@ -1,0 +1,63 @@
+database_name:
+  database:
+    reference:     database_name
+    update:        database_name
+    class:         Bd_Db
+    
+  base_class:
+    record:        Bd_Db_Record
+    table:         Bd_Db_Table
+    const:         Bd_Db_Const
+    record_list:   Bd_Db_Record_List
+    
+#  tables:
+#    table_name:
+#      const:
+#        array:
+#          - name:  ID_CODE
+#            key:   id
+#            value: code
+#        vars:
+#          role_system:  1
+#          role_admin:   2
+#        record:
+#          key: code
+#          value: id
+#          valueの名前にcodeのカラムの値をつけてconstの名前を生成します。ex:ID_SYSTEM,ID_ADMIN
+#      base_class:
+#        record:        Bd_Db_Record_Someting
+#      relations:
+#        - type:       ref_one
+#          table:      target_table_name
+#          references: id
+#          foreign:    table_name_id
+#          
+#        - type:       has_one
+#          table:      target_table_name
+#          references: table_name_id
+#          foreign:    id
+#          
+#        - type:       one_many
+#          table:      target_table_name
+#          references: id
+#          foreign:    table_name_id
+#          
+#        - type:       many_one
+#          table:      target_table_name
+#          references: table_name_id
+#          foreign:    id
+#          
+#        - type:       many_many
+#          table:      taget_table_name
+#          mid_table:  rel_table_name
+#          references: id
+#          foreign:    table_name_id
+#          
+#        - type:       one_many
+#          table:      target_table_name
+#          references: id
+#          foreign:    table_name_id
+#          name:       TagetTable
+#          oposite:    false
+          
+          
