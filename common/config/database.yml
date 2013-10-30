@@ -1,8 +1,11 @@
-database_name:
+board_master:
   class:    Sdx_Db_Adapter_Mysql
   host:     localhost
-  username: user_name
-  password: password
-  dbname:   database_name
+  username: board-admin
+  password: dMzno2lM
+  dbname:   board
   charset:  utf8
   unix_socket:   /var/lib/mysql/mysql.sock
+
+board_slave:
+  alias:     board_master

@@ -1,7 +1,7 @@
-database_name:
+board_master:
   database:
-    reference:     database_name
-    update:        database_name
+    reference:     board_slave
+    update:        board_master
     class:         Bd_Db
     
   base_class:
@@ -9,7 +9,22 @@ database_name:
     table:         Bd_Db_Table
     const:         Bd_Db_Const
     record_list:   Bd_Db_Record_List
-    
+  
+  tables:
+    account:
+      relations:
+        - type:       one_many
+          table:      entry
+          references: id
+          foreign:    account_id
+  
+    thread:
+      relations:
+        - type:       one_many
+          table:      entry
+          references: id
+          foreign:    thread_id
+ 
 #  tables:
 #    table_name:
 #      const:

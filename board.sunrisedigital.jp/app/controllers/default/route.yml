@@ -1,6 +1,6 @@
 routes:
 
-  thread_default:
+thread_default:
     route:          /thread/:thread_id/:action
     defaults:
       module:       default
@@ -8,18 +8,6 @@ routes:
       action:       index
     reqs:
       thread_id:     '[0-9]+'
-  
-  matsu_default:
-    route:          /matsu/:thread_id/:action
-    defaults:
-      module:       default
-      controller:   matsu
-      action:       index
-    reqs:
-      thread_id:     'a|b|c'
- 
-
-
 
 #  sample:
 #    route:          /:placeholder/:controller/:action
