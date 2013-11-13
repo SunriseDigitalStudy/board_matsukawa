@@ -17,6 +17,12 @@ board_master:
           table:      entry
           references: id
           foreign:    account_id
+          
+        - type:       one_many
+          table:      auto_login
+          references: id
+          foreign:    account_id
+ 
   
     thread:
       relations:
@@ -24,6 +30,9 @@ board_master:
           table:      entry
           references: id
           foreign:    thread_id
+          
+   
+   
  
 #  tables:
 #    table_name:

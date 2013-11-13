@@ -31,7 +31,7 @@ abstract class Bd_Orm_Main_Base_Table_Account extends Bd_Db_Table
 
     protected static $_class_suffix = 'Account';
 
-    private static $_nullable = array();
+    private static $_nullable = array('password');
 
     private static $_relations = null;
 

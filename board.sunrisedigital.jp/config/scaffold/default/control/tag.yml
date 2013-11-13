@@ -1,0 +1,21 @@
+model:        Bd_Orm_Main_Tag
+page_name:    タグ
+ 
+form:
+  fields:
+    id:
+      settings:
+        label: ID
+    name:
+      settings:
+        label: 名称
+ 
+list:
+  delete_label:  削除
+  method:        fetchAllNewOrdered
+  display:
+    - label:     ID
+      column:    id
+ 
+    - label:     名称
+      column:    name

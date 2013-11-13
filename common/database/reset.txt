@@ -1,0 +1,10 @@
+#!/bin/sh
+{
+     echo [Start `date '+%Y-%m-%d %T'`]\
+ &&  /usr/bin/mysql -u root mysql < /home/source/sites/board/common/database/sql/create_tables.sql\
+ &&  /usr/bin/mysql -u root mysql < /home/source/sites/board/common/database/sql/grant.sql\
+ &&  /home/source/sites/board/board.sunrisedigital.jp/sunrise -dnvocfmr generate:models board_master Bd_Orm_Main\
+ &&  /home/source/sites/board/board.sunrisedigital.jp/sunrise -dn generate:record data/sample\
+ &&  /home/source/sites/board/board.sunrisedigital.jp/sunrise -dnvocfmr generate:models board_master Bd_Orm_Main\
+ &&  echo [End `date '+%Y-%m-%d %T'`]
+} 2>&1

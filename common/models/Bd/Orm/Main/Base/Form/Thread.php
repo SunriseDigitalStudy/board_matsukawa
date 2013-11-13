@@ -30,6 +30,19 @@ abstract class Bd_Orm_Main_Base_Form_Thread extends Sdx_Form
     /**
      * @return Sdx_Form_Element
      */
+    public static function createGenreIdElement(Sdx_Db_Record $record = null)
+    {
+        return new Sdx_Form_Element_Text(array('name'=>'genre_id'));
+    }
+
+    public static function createGenreIdValidator(Sdx_Form_Element $element, Sdx_Db_Record $record = null)
+    {
+        $element->addValidator(new Sdx_Validate_NotEmpty());
+    }
+
+    /**
+     * @return Sdx_Form_Element
+     */
     public static function createTitleElement(Sdx_Db_Record $record = null)
     {
         return new Sdx_Form_Element_Text(array('name'=>'title'));
@@ -49,6 +62,13 @@ abstract class Bd_Orm_Main_Base_Form_Thread extends Sdx_Form
         	$element = call_user_func(array('Bd_Orm_Main_Form_Thread', 'createIdElement'), $this->_record);
         	$this->setElement($element);
         	call_user_func(array('Bd_Orm_Main_Form_Thread', 'createIdValidator'), $element, $this->_record);
+        }
+        
+        if(!in_array('genre_id', $this->_except_list))
+        {
+        	$element = call_user_func(array('Bd_Orm_Main_Form_Thread', 'createGenreIdElement'), $this->_record);
+        	$this->setElement($element);
+        	call_user_func(array('Bd_Orm_Main_Form_Thread', 'createGenreIdValidator'), $element, $this->_record);
         }
         
         if(!in_array('title', $this->_except_list))

@@ -1,0 +1,33 @@
+models:
+  Bd_Orm_Main_Account:
+    insert:
+      account_sunrise:
+        login_id:      sunrise
+        raw_password:  sunrise5963
+        name:          サンライズ
+ 
+ 
+ 
+  Bd_Orm_Main_Genre:
+    insert:
+      genre_news:
+        name:     ニュース
+        sequence: %SDX_INCREMENT:genre%
+ 
+      genre_world:
+        name:     世界情勢
+        sequence: %SDX_INCREMENT:genre%
+        
+  Bd_Orm_Main_Thread:
+    insert:
+      thread_new_college:
+        title:    女子大生殺人事件
+        Genre:   genre_news
+ 
+      thread_news_ap:
+        title:    原発実況
+        Genre:   genre_news
+ 
+      thread_world:
+        title:    捕鯨問題スレッド
+        Genre:   genre_world

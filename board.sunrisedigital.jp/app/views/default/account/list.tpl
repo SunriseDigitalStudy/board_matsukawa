@@ -11,6 +11,10 @@
         <div>{$entry->getCreatedAt()}</div>
         <div>{$entry->getThread()->getTitle()}</div>
         <div>{$entry->getBody()}</div>
+        <div>{$entry->getUpdatedAt()}</div>
+        <div>{$entry->getThread()->getId()}</div>//threadテーブルのIDは二通りの方法で取得できる。
+        <div>{$entry->getThreadId()}</div>
+{*        <div>{$entry->getAccountId}</div>*}
       </li>
       {/foreach}
     </ul>

@@ -7,6 +7,7 @@ abstract class Bd_Orm_Main_Base_Table_Thread extends Bd_Db_Table
 
     private static $_columns = array(
         'id',
+        'genre_id',
         'title',
         'created_at'
         );
@@ -41,6 +42,14 @@ abstract class Bd_Orm_Main_Base_Table_Thread extends Bd_Db_Table
         if(is_null(self::$_relations))
         {
         	self::$_relations = array();
+        	self::$_relations['Entry'] = Sdx_Db_Relation::create(
+        		Sdx_Db_Relation::TYPE_ONE_MANY,
+        		'Entry',
+        		'Thread',
+        		array('reference'=>'id', 'foreign'=>'thread_id'),
+        		'Bd_Orm_Main_Entry',
+        		null
+        	);
         }
     }
 

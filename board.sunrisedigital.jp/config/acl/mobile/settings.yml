@@ -1,0 +1,11 @@
+SDX_EXTEND: acl/settings
+
+forward:
+  authentication:
+    module:     default
+    controller: secure
+    action:     login
+  authorization:
+    module:     default
+    controller: secure
+    action:     deny

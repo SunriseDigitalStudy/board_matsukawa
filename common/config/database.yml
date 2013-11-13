@@ -2,7 +2,7 @@ board_master:
   class:    Sdx_Db_Adapter_Mysql
   host:     localhost
   username: board-admin
-  password: dMzno2lM
+  password: somepassword
   dbname:   board
   charset:  utf8
   unix_socket:   /var/lib/mysql/mysql.sock
