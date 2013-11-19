@@ -18,6 +18,25 @@ routes:
     reqs:
       thread_id:     'a|b|c'
  
+  thread3_default:
+    route:          /thread3/:genre_id/:action
+    defaults:
+      module:       default
+      controller:   thread3
+      action:       list
+    reqs:
+      thread_id:     '[0-9]+'
+      
+  entry3_default:
+    route:          /entry3/:thread_id/:action
+    defaults:
+      module:       default
+      controller:   entry3
+      action:       list
+    reqs:
+      thread_id:     '[0-9]+'
+  
+ 
 
 
 

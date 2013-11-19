@@ -50,20 +50,26 @@ class Thread2Controller extends Sdx_Controller_Action_Http {
         }
     }
 
-    //リスト表示
-    public function listAction() {
+    //サッカージャンルのスレッド一覧表示
+     public function list4Action() {
 
         $t_Threadt = Bd_Orm_Main_Thread::createTable();
-
-        //Selectの取得
+        
+        //Selectの取得        
         $select = $t_Threadt->getSelect();
+//        Sdx_Debug::dump($select, 'select');
         //selectにWHERE句を追加　※idの値は適宜書き換えて下さい
-//        $select->add('id', array(4,5));
+        $select->add('genre_id', array(4));
         //SQLを発行
         $list = $t_Threadt->fetchAll($select);
-        Sdx_Debug::dump($list, 'method');
+//        Sdx_Debug::dump($list, 'method');
+        
+               
+        
 
         $this->view->assign('threadt_list', $list);
+    
+    
     }
 
 }

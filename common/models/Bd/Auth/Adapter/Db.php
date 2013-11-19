@@ -46,6 +46,7 @@ class Bd_Auth_Adapter_Db extends Sdx_Auth_Adapter_Db2
       return $accout;
   }
 
+  
   /**
    * パスワードが一致しているか検証する
    * @param mixed $account

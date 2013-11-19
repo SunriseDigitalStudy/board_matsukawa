@@ -20,6 +20,8 @@
       <div class="form-group">
         {$form.name->setLabel('ニックネーム')->renderLabel() nofilter}
         {$form.name->render([class=>"form-control", placeholder=>$form.name->getLabel()]) nofilter}
+{*        入力フォームの無効化
+        {$form.name->render([class=>"form-control", placeholder=>$form.name->getLabel(),disabled=>"true"]) nofilter}*}
         {$form.name->renderError() nofilter}
       </div>
       <div class="text-center">

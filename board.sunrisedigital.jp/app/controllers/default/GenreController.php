@@ -9,8 +9,6 @@ class GenreController extends Sdx_Controller_Action_Http {
         $form
                 ->setActionCurrentPage() //アクション先を現在のURLに設定
                 ->setMethodToPost();     //メソッドをポストに変更
-       
-
         //name
         $elem = new Sdx_Form_Element_Text();
         $elem->setName('name');
@@ -63,11 +61,9 @@ class GenreController extends Sdx_Controller_Action_Http {
         //SQLを発行
         $list = $t_genre->fetchAll($select);
 //         Sdx_Debug::dump($list, 'method');
-        
-        $this->view->assign('genre_list', $list);
-         
-        
 
+
+        $this->view->assign('genre_list', $list);
     }
 
 }

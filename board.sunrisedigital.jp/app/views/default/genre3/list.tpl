@@ -6,7 +6,7 @@
   <li>
     <div class="account">
 
-        <a href="/thread2/list{$genre->getId()}">{$genre->getName()}</a>        
+        <a href="/thread3/{$genre->getId()}/list">{$genre->getName()}</a>        
         
     </div>    
   </li>
