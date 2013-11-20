@@ -11,7 +11,7 @@ class GenreController extends Sdx_Controller_Action_Http {
                 ->setMethodToPost();     //メソッドをポストに変更
         //name
         $elem = new Sdx_Form_Element_Text();
-        $elem->setName('name');
+        $elem->setName('name ASC');
         $form->setElement($elem);
 
         //sequence

@@ -13,7 +13,7 @@ class Thread3Controller extends Sdx_Controller_Action_Http {
         //URLのgenre_id部分の変数の値を取得
         $genre_id = $this->_getParam('genre_id');
         //selectにWHERE句を追加　
-        $select->add('genre_id', array($genre_id));
+        $select->add('genre_id', array($genre_id))->order('title ASC');
         //SQLを発行
         $list = $t_Threadt->fetchAll($select);
          
