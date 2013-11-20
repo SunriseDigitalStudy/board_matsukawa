@@ -22,7 +22,6 @@ class Entry3Controller extends Sdx_Controller_Action_Http {
         //idの昇順で並べる
         $select->order('id ASC');
 
-        //この結果はまだentryにレコードがないのでSQLだけ確認して下さい。
         $list = $t_entry->fetchAll($select);
 
         $this->view->assign('entry_list', $list);
@@ -55,10 +54,11 @@ class Entry3Controller extends Sdx_Controller_Action_Http {
         //smartyにアサイン           
         $this->view->assign('form', $form);
 
-
-
-//        smartyにアサイン           
-//        $this->view->assign('login_id', $login_id);
+        //アカウント情報を取得。nullの場合はログインしていない。
+        $sdx_context = Sdx_Context::getInstance();
+        $login_id = $sdx_context->getVar('signed_account');     
+        //smartyにアサイン           
+        $this->view->assign('login_id', $login_id);
         
 
 

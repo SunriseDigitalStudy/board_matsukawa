@@ -18,18 +18,18 @@
         {/foreach}
     </ol>  
 
-{*    {if $login_id = $sdx_context->getVar('signed_account')->getId() != null}*}
-        {$form->renderStartTag() nofilter}  
-        {$form.entry->setLabel('コメント')->renderLabel() nofilter}
-        {$form.entry->render([class=>"form-control", placeholder=>"ゆっくりしていってね∩( ´∀｀)∩ヽ(〃´∀｀〃)ﾉ"]) nofilter}
-        <input type="submit" name="submit" value="送信" class="btn btn-success">
-        </form>
-    {*{else}
-        <font color="red"><b>ログインしないとコメントできません</b></font>
+    {if $login_id == null}  {*ログイン情報がない場合*}
+        <font color="red"><b>ログインをしないとコメントはできません</b></font>
         {$form->renderStartTag() nofilter}  
         {$form.entry->setLabel('コメント')->renderLabel() nofilter}
         {$form.entry->render([class=>"form-control", placeholder=>"ゆっくりしていってね∩( ´∀｀)∩ヽ(〃´∀｀〃)ﾉ", disabled=>"true"]) nofilter}
         <input type="submit" name="submit" value="送信" disabled="true" class="btn btn-success">
         </form>
-    {/if}*}
+    {else} {*ログイン情報がある場合*}
+        {$form->renderStartTag() nofilter}  
+        {$form.entry->setLabel('コメント')->renderLabel() nofilter}
+        {$form.entry->render([class=>"form-control", placeholder=>"ゆっくりしていってね∩( ´∀｀)∩ヽ(〃´∀｀〃)ﾉ"]) nofilter}
+        <input type="submit" name="submit" value="送信" class="btn btn-success">
+        </form>
+    {/if}
 {/block}
