@@ -12,16 +12,17 @@
                     {$entry->getBody()}
             </li>
         {/foreach}
-    </ol>  
+    </ol>     
+   
 
-    {if $login_id == null}  {*ログイン情報がない場合*}
+    {if $login_id == null}
         <font color="red"><b>ログインをしないとコメントはできません</b></font>
         {$form->renderStartTag() nofilter}  
         {$form.body->setLabel('コメント')->renderLabel() nofilter}
         {$form.body->render([class=>"form-control", placeholder=>"ゆっくりしていってね∩( ´∀｀)∩ヽ(〃´∀｀〃)ﾉ", disabled=>"true"]) nofilter}       
         <input type="submit" name="submit" value="送信" disabled="true" class="btn btn-success">
         </form>
-    {else} {*ログイン情報がある場合*}
+    {else} 
         {$form->renderStartTag() nofilter}  
         {$form.body->setLabel('コメント')->renderLabel() nofilter}
         {$form.body->render([class=>"form-control", placeholder=>"ゆっくりしていってね∩( ´∀｀)∩ヽ(〃´∀｀〃)ﾉ"]) nofilter}
