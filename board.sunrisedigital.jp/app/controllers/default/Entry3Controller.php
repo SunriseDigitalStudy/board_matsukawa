@@ -2,6 +2,10 @@
 
 class Entry3Controller extends Sdx_Controller_Action_Http {
 
+    public function indexAction() {
+        $this->_disableViewRenderer();
+    }
+
     //エントリーの一覧表示
     public function listAction() {
 
@@ -17,12 +21,9 @@ class Entry3Controller extends Sdx_Controller_Action_Http {
         $select = $t_entry->getSelectWithJoin();
         //URLからthread_idを取得
         $thread_id = $this->_getParam('thread_id');
-        //selectにWHERE句を追加
-        $select->add('thread_id', array($thread_id));
-        //idの昇順で並べる
-        $select->order('id ASC');
+        //selectにWHERE句を追加 //idの昇順で並べる
+        $select->add('thread_id', array($thread_id))->order('id ASC');
 
-        //この結果はまだentryにレコードがないのでSQLだけ確認して下さい。
         $list = $t_entry->fetchAll($select);
 
         $this->view->assign('entry_list', $list);
@@ -37,7 +38,7 @@ class Entry3Controller extends Sdx_Controller_Action_Http {
         $thread = $t_thread->findByPkey($thread_id);
 
         //テンプレートにアサイン
-        $this->view->assign('thread_list', $thread);
+        $this->view->assign('thread', $thread);
 
 
         /*
@@ -49,17 +50,21 @@ class Entry3Controller extends Sdx_Controller_Action_Http {
                 ->setMethodToPost();     //メソッドをポストに変更
         //エレメントをフォームにセット
         $elem = new Sdx_Form_Element_Textarea();
-        $elem->setName('entry');
+        $elem
+                ->setName('body')
+                ->addValidator(new Sdx_Validate_NotEmpty)
+                ->addValidator(new Sdx_Validate_StringLength(array('max' => 200)));
         $form->setElement($elem);
 
         //smartyにアサイン           
         $this->view->assign('form', $form);
 
+        //アカウント情報を取得。nullの場合はログインしていない。
+        $sdx_context = Sdx_Context::getInstance();
+        $login_id = $sdx_context->getVar('signed_account');
+        //smartyにアサイン           
+        $this->view->assign('login_id', $login_id);
 
-
-//        smartyにアサイン           
-//        $this->view->assign('login_id', $login_id);
-        
 
 
 
@@ -67,38 +72,47 @@ class Entry3Controller extends Sdx_Controller_Action_Http {
          * submit時のデータ処理 
          */
         if ($this->_getParam('submit')) {
-            
-            //URLからthread_idを取得
-            $thread_id = $this->_getParam('thread_id');
-            
-            //Sdx_Contextからログイン時のアカウントIDの取得
-            $sdx_context = Sdx_Context::getInstance();
-            $login_id = $sdx_context->getVar('signed_account')->getId();
-            
-            $entry = new Bd_Orm_Main_Entry();
-            $db = $entry->updateConnection();
 
+            //Validateを実行するためにformに値をセット
+            //エラーが有った時各エレメントに値を戻す処理も兼ねてます
+            $form->bind($this->_getAllParams());
 
-            $db->beginTransaction();
+            //Validateを実行
+            if ($form->execValidate()) {
 
-            try {
+                //全てのエラーチェックを通過
+                //URLからthread_idを取得
+                $thread_id = $this->_getParam('thread_id');
 
+                //Sdx_Contextからログイン時のアカウントIDの取得
+                $sdx_context = Sdx_Context::getInstance();
+                $login_id = $sdx_context->getVar('signed_account')->getId();
+
+                $entry = new Bd_Orm_Main_Entry();
+                $db = $entry->updateConnection();
+
+                //entryに値をセット
                 $entry
                         //スレッドIDをセット
                         ->setThreadId($thread_id)
                         //ログイン時のアカウントIDをセット
                         ->setAccountId($login_id)
                         //入力フォームの内容をセット
-                        ->setBody($this->_getParam('entry'));
+                        ->setBody($this->_getParam('body'));
 
-                $entry->save();
+                $db->beginTransaction();
 
-                $db->commit();
+                try {
 
-                $this->redirectAfterSave('/entry3/' . $thread_id . '/list');
-            } catch (Exception $e) {
-                $db->rollback();
-                throw $e;
+                    $entry->save();
+
+                    $db->commit();
+
+                    $this->redirectAfterSave('/entry3/' . $thread_id . '/list');
+                } catch (Exception $e) {
+                    $db->rollback();
+                    throw $e;
+                }
             }
         }
     }
