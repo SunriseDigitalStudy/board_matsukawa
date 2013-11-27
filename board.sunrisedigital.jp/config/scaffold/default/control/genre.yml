@@ -1,0 +1,28 @@
+model:        Bd_Orm_Main_Genre
+page_name:    ジャンル
+ 
+form:
+  fields:
+    id:
+      settings:
+        label: ID
+    name:
+      settings:
+        label: ジャンル名  
+    sequence:
+      settings:
+        label: シーケンス
+    
+ 
+list:
+  delete_label:  削除
+  method:        fetchAllNewerOrdered
+  display:
+    - label:     ID
+      column:    id
+ 
+    - label:     名前
+      column:    name
+      
+    - label:     シーケンス
+      column:    sequence
