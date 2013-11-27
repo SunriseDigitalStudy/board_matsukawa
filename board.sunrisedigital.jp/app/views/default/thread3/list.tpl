@@ -6,7 +6,7 @@
   <li>
         <a href="/entry3/{$threadt->getId()}/list">{$threadt->getTitle()}</a>
         &nbsp;
-        {$threadt->get('updated')}
+        {if $threadt->get('updated')}{$threadt->getZendDate('updated')->get('yyyy年MM月dd日(E) HH時mm分ss秒')}{/if}
   </li>
   {/foreach}
 </ul>  

@@ -8,14 +8,14 @@
             <li>
                 {$account = $entry->getAccount()}       
                     名前：{$account->getName()} &nbsp;
-                    日時：{$entry->getCreatedAt()}</br>
+                    日時：{$entry->getZendDate('created_at')->get('yyyy年MM月dd日(E) HH時mm分ss秒')}</br>
                     {$entry->getBody()}
             </li>
         {/foreach}
     </ol>     
    
 
-    {if $login_id == null}
+    {if $sdx_context->getUser()->hasId() == null}
         <font color="red"><b>ログインをしないとコメントはできません</b></font>
         {$form->renderStartTag() nofilter}  
         {$form.body->setLabel('コメント')->renderLabel() nofilter}

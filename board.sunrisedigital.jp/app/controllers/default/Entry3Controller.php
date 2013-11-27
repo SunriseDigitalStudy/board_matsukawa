@@ -57,22 +57,19 @@ class Entry3Controller extends Sdx_Controller_Action_Http {
         $form->setElement($elem);
 
         //smartyにアサイン           
-        $this->view->assign('form', $form);
-
-        //アカウント情報を取得。nullの場合はログインしていない。
-        $sdx_context = Sdx_Context::getInstance();
-        $login_id = $sdx_context->getVar('signed_account');
-        //smartyにアサイン           
-        $this->view->assign('login_id', $login_id);
-
-
-
+        $this->view->assign('form', $form);      
+        
 
         /*
          * submit時のデータ処理 
          */
         if ($this->_getParam('submit')) {
-
+            
+            //ログインユーザー以外からのPOSTの場合
+            if(Sdx_Context::getInstance()->getUser()->hasId() == null){
+                $this->forward404();
+            }
+            
             //Validateを実行するためにformに値をセット
             //エラーが有った時各エレメントに値を戻す処理も兼ねてます
             $form->bind($this->_getAllParams());
@@ -86,7 +83,7 @@ class Entry3Controller extends Sdx_Controller_Action_Http {
 
                 //Sdx_Contextからログイン時のアカウントIDの取得
                 $sdx_context = Sdx_Context::getInstance();
-                $login_id = $sdx_context->getVar('signed_account')->getId();
+                $signed_account = $sdx_context->getVar('signed_account')->getId();
 
                 $entry = new Bd_Orm_Main_Entry();
                 $db = $entry->updateConnection();
@@ -96,7 +93,7 @@ class Entry3Controller extends Sdx_Controller_Action_Http {
                         //スレッドIDをセット
                         ->setThreadId($thread_id)
                         //ログイン時のアカウントIDをセット
-                        ->setAccountId($login_id)
+                        ->setAccountId($signed_account)
                         //入力フォームの内容をセット
                         ->setBody($this->_getParam('body'));
 
