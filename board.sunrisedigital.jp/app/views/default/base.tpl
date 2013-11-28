@@ -42,7 +42,8 @@
 {*{$sdx_context->getVar('signed_account')->getName()}*}
               <li class="dropdown-header">{$sdx_context->getVar('signed_account')->getName()}</li>
               <li><a href="/secure/logout"><i class="fa fa-sign-out"></i> ログアウト</a></li>
-              <li>&nbsp;スレッド作成</li>
+              <li><a href="/control/thread"><i class="fa fa-sign-out"></i> スレッド作成</a></li>
+              <li><a href="/control/genre"><i class="fa fa-sign-out"></i> ジャンル作成</a></li>
               {else}
               <li><a href="/account/create"><i class="fa fa-plus-square"></i> ユーザー登録</a>
               </li>

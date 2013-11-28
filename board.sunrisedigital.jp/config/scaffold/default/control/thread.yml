@@ -1,0 +1,28 @@
+model:        Bd_Orm_Main_Thread
+page_name:    スレッド
+ 
+form:
+  fields:
+    id:
+      settings:
+        label: ID
+    genre_id:
+      settings:
+        label: ジャンルID  
+    title:
+      settings:
+        label: タイトル
+    
+ 
+list:
+  delete_label:  削除
+  method:        fetchAllNewerOrdered
+  display:
+    - label:     ID
+      column:    id
+ 
+    - label:     ジャンルID
+      column:    genre_id
+      
+    - label:     スレッドタイトル
+      column:    title
