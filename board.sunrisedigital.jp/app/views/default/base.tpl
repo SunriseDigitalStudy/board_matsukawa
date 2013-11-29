@@ -23,6 +23,7 @@
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   {block js}{/block}
   <title>３ちゃんねる {block title}{/block}</title>
+  <link rel="stylesheet" href="/css/entry3.css" type="text/css">
 </head>
 <body>
   <header class="navbar navbar-inverse">{$sdx_user = $sdx_context->getUser()}
