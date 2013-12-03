@@ -9,7 +9,7 @@
                 {$account = $entry->getAccount()}       
                     名前：{$account->getName()} &nbsp;
                     日時：{$entry->getZendDate('created_at')->get('yyyy年MM月dd日(E) HH時mm分ss秒')}</br>
-                    {$entry->getBody()}
+                    <p class="newline">{$entry->getBody()|escape|nl2br nofilter}</p>
             </li>
         {/foreach}
     </ol>     
