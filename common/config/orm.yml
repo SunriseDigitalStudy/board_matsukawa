@@ -3,13 +3,13 @@ board_master:
     reference:     board_slave
     update:        board_master
     class:         Bd_Db
-    
+ 
   base_class:
     record:        Bd_Db_Record
     table:         Bd_Db_Table
     const:         Bd_Db_Const
     record_list:   Bd_Db_Record_List
-  
+ 
   tables:
     account:
       relations:
@@ -17,20 +17,37 @@ board_master:
           table:      entry
           references: id
           foreign:    account_id
-          
+ 
         - type:       one_many
           table:      auto_login
           references: id
           foreign:    account_id
  
-  
     thread:
       relations:
+        - type:       many_one
+          table:      genre
+          references: genre_id
+          foreign:    id
+ 
         - type:       one_many
           table:      entry
           references: id
           foreign:    thread_id
-          
+ 
+        - type:       many_many
+          table:      tag
+          mid_table:  thread_tag
+          references: id
+          foreign:    thread_id
+ 
+    tag:
+      relations:
+        - type:       many_many
+          table:      thread
+          mid_table:  thread_tag
+          references: id
+          foreign:    tag_id
    
    
  

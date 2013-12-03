@@ -17,5 +17,5 @@ list:
     - label:     ID
       column:    id
  
-    - label:     名称
+    - label:     タグ名
       column:    name

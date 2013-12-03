@@ -1,28 +1,56 @@
 model:        Bd_Orm_Main_Thread
-page_name:    スレッド
+
+page_name:    Thread
+ 
+navi:
+  label: <i class="fa fa-chevron-left"></i> ジャンルに戻る
+  uri:   /control/genre
  
 form:
   fields:
+ 
     id:
       settings:
         label: ID
-    genre_id:
-      settings:
-        label: ジャンルID  
+ 
     title:
       settings:
         label: タイトル
-    
+ 
+    genre_id:
+      settings:
+        label: ジャンル
+ 
+    Tag__id:
+      settings:
+        label: タグ
+        
+grouping:
+  fixed:
+    target:    genre_id
+    model:
+      name:    Bd_Orm_Main_Genre
+      display: name
  
 list:
-  delete_label:  削除
-  method:        fetchAllNewerOrdered
+  filter:        Bd_Scaffold_Filter_Thread
+  per_page:      10
   display:
+    - label:     <i class="fa fa-edit"></i>編集
+      action:    edit
+ 
     - label:     ID
       column:    id
  
-    - label:     ジャンルID
-      column:    genre_id
-      
-    - label:     スレッドタイトル
+    - label:     タイトル
       column:    title
+ 
+    - label:     ジャンル
+      column:    genre.name
+ 
+    - label:     登録日時
+      column:    created_at
+ 
+    - label:     削除
+      action:    delete
+

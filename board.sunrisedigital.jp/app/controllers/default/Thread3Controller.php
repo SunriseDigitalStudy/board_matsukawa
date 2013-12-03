@@ -27,13 +27,13 @@ class Thread3Controller extends Sdx_Controller_Action_Http {
                       
         //組み立てたSQL文を文字列として取り出し、$select_thに組み込む。        
         //Zend_Db_Exprを使ってサブクエリのクォートを無効化
-        $sub_Query = $select_th->expr('('.$select_en->assemble().')');       
+        $sub_Query = $select_th->expr('('.$select_en->assemble().')'); 
       
         //joinInner 第一引数・結合するテーブル名　第二引数・結合のための条件文       
         $select_th->joinLeft(array('max_updated'=>$sub_Query),'thread.id = max_updated.thread_id')
                   ->add('genre_id' , $this->_getParam('genre_id'))
-                  ->order('updated DESC');   
-        
+                  ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC');   
+
         //SQLを発行
         $threadt_list = $t_thread->fetchAll($select_th);
         

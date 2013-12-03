@@ -53,7 +53,7 @@ class Entry3Controller extends Sdx_Controller_Action_Http {
         $elem
                 ->setName('body')
                 ->addValidator(new Sdx_Validate_NotEmpty)
-                ->addValidator(new Sdx_Validate_StringLength(array('max' => 200)));
+                ->addValidator(new Sdx_Validate_StringLength(array('max' => 5000)));
         $form->setElement($elem);
 
         //smartyにアサイン           

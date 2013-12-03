@@ -30,9 +30,29 @@ abstract class Bd_Orm_Main_Base_Form_Thread extends Sdx_Form
     /**
      * @return Sdx_Form_Element
      */
+    public static function createTitleElement(Sdx_Db_Record $record = null)
+    {
+        return new Sdx_Form_Element_Text(array('name'=>'title'));
+    }
+
+    public static function createTitleValidator(Sdx_Form_Element $element, Sdx_Db_Record $record = null)
+    {
+        $element->addValidator(new Sdx_Validate_NotEmpty());$element->addValidator(new Sdx_Validate_StringLength(array('max'=>80)));
+    }
+
+    /**
+     * @return Sdx_Form_Element
+     */
     public static function createGenreIdElement(Sdx_Db_Record $record = null)
     {
-        return new Sdx_Form_Element_Text(array('name'=>'genre_id'));
+        $elem = new Sdx_Form_Element_Group_Select(array('name'=>'genre_id'));
+        $select = Bd_Orm_Main_Genre::getTable()->getSelect()
+        ->resetColumns()
+        ->columns(array('id', 'name'))
+        ->order('sequence ASC');
+        $elem->setChildren($select->fetchPairs());
+        $elem->setDefaultEmptyChild('ジャンルを選択して下さい');
+        return $elem;
     }
 
     public static function createGenreIdValidator(Sdx_Form_Element $element, Sdx_Db_Record $record = null)
@@ -43,14 +63,20 @@ abstract class Bd_Orm_Main_Base_Form_Thread extends Sdx_Form
     /**
      * @return Sdx_Form_Element
      */
-    public static function createTitleElement(Sdx_Db_Record $record = null)
+    public static function createMMTagIdElement(Sdx_Db_Record $record = null)
     {
-        return new Sdx_Form_Element_Text(array('name'=>'title'));
+        $elem = new Sdx_Form_Element_Group_Checkbox(array('name'=>'Tag__id'));
+        $select = Bd_Orm_Main_Tag::getTable()->getSelect()
+            ->resetColumns()
+            ->columns(array('id', 'name'))
+            ->order('id ASC');
+        $elem->setChildren($select->fetchPairs());
+        return $elem;
     }
 
-    public static function createTitleValidator(Sdx_Form_Element $element, Sdx_Db_Record $record = null)
+    public static function createMMTagIdValidator(Sdx_Form_Element $element, Sdx_Db_Record $record = null)
     {
-        $element->addValidator(new Sdx_Validate_NotEmpty());$element->addValidator(new Sdx_Validate_StringLength(array('max'=>80)));
+        
     }
 
     protected function _init()
@@ -64,6 +90,15 @@ abstract class Bd_Orm_Main_Base_Form_Thread extends Sdx_Form
         	call_user_func(array('Bd_Orm_Main_Form_Thread', 'createIdValidator'), $element, $this->_record);
         }
         
+        if(!in_array('title', $this->_except_list))
+        {
+        	$element = call_user_func(array('Bd_Orm_Main_Form_Thread', 'createTitleElement'), $this->_record);
+        	$this->setElement($element);
+        	call_user_func(array('Bd_Orm_Main_Form_Thread', 'createTitleValidator'), $element, $this->_record);
+        }
+        
+        
+        
         if(!in_array('genre_id', $this->_except_list))
         {
         	$element = call_user_func(array('Bd_Orm_Main_Form_Thread', 'createGenreIdElement'), $this->_record);
@@ -71,11 +106,11 @@ abstract class Bd_Orm_Main_Base_Form_Thread extends Sdx_Form
         	call_user_func(array('Bd_Orm_Main_Form_Thread', 'createGenreIdValidator'), $element, $this->_record);
         }
         
-        if(!in_array('title', $this->_except_list))
+        if(!in_array('Tag__id', $this->_except_list))
         {
-        	$element = call_user_func(array('Bd_Orm_Main_Form_Thread', 'createTitleElement'), $this->_record);
+        	$element = call_user_func(array('Bd_Orm_Main_Form_Thread', 'createMMTagIdElement'), $this->_record);
         	$this->setElement($element);
-        	call_user_func(array('Bd_Orm_Main_Form_Thread', 'createTitleValidator'), $element, $this->_record);
+        	call_user_func(array('Bd_Orm_Main_Form_Thread', 'createMMTagIdValidator'), $element, $this->_record);
         }
     }
 
