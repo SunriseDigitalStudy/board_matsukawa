@@ -37,7 +37,7 @@ abstract class Bd_Orm_Main_Base_Form_ThreadTag extends Sdx_Form
 
     public static function createTagIdValidator(Sdx_Form_Element $element, Sdx_Db_Record $record = null)
     {
-        
+      
     }
 
     protected function _init()

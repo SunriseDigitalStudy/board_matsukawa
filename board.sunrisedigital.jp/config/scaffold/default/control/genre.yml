@@ -2,27 +2,31 @@ model:        Bd_Orm_Main_Genre
 page_name:    ジャンル
  
 form:
+  sequence:
+    column:      sequence
+    direction:   ASC
   fields:
     id:
       settings:
         label: ID
     name:
       settings:
-        label: ジャンル名  
-    sequence:
-      settings:
-        label: シーケンス
-    
+        label: タイトル
  
 list:
-  delete_label:  削除
-  method:        fetchAllNewerOrdered
   display:
+    - label:     <i class="fa fa-edit"></i>編集
+      action:    edit
+ 
     - label:     ID
       column:    id
  
-    - label:     名前
+    - label:     タイトル
       column:    name
-      
-    - label:     シーケンス
-      column:    sequence
+ 
+    - label:     スレッド編集
+      html:      <a href="/control/thread?group=%record:id%">スレッド編集 <i class="fa fa-chevron-right"></i></a>
+ 
+    - label:     削除
+      action:    delete
+  

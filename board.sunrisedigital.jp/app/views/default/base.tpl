@@ -45,6 +45,7 @@
               <li><a href="/secure/logout"><i class="fa fa-sign-out"></i> ログアウト</a></li>
               <li><a href="/control/thread"><i class="fa fa-sign-out"></i> スレッド作成</a></li>
               <li><a href="/control/genre"><i class="fa fa-sign-out"></i> ジャンル作成</a></li>
+              <li><a href="/control/tag"><i class="fa fa-sign-out"></i> タグ作成</a></li>
               {else}
               <li><a href="/account/create"><i class="fa fa-plus-square"></i> ユーザー登録</a>
               </li>
