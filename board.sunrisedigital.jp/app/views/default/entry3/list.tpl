@@ -13,7 +13,7 @@
             </li>
         {/foreach}
     </ol>     
-   
+ 
 
     {if $sdx_context->getUser()->hasId() == null}
         <font color="red"><b>ログインをしないとコメントはできません</b></font>
