@@ -21,7 +21,7 @@ class SearchController extends Sdx_Controller_Action_Http {
         //パラメータを取得
         $radio = $this->_getParam('radio');
         $checkbox = $this->_getParam('checkbox');
-        
+
         /*
          * 複合条件検索のSQLをORMで作成
          */
@@ -38,7 +38,7 @@ class SearchController extends Sdx_Controller_Action_Http {
                 ->group('thread_id');
 
         //メインクエリ作成
-        if ($checkbox != null & $radio != null) {
+        if ($checkbox != null && $radio != null) {
             //join            
             $t_thread->addJoinLeft($t_thread_tag);
             //slectの条件文
@@ -51,7 +51,7 @@ class SearchController extends Sdx_Controller_Action_Http {
                     ->group('thread.id')
                     ->having('COUNT(tag_id) =' . count($checkbox))
                     ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC');
-        } elseif ($checkbox == null & $radio == null) {
+        } elseif ($checkbox == null && $radio == null) {
             $select_th = $t_thread->getSelect();
             $sub_Query = $select_th->expr('(' . $select_en->assemble() . ')');
             $select_th

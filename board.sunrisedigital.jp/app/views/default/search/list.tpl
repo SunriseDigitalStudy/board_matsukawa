@@ -1,4 +1,4 @@
-{extends file='default/base.tpl'}
+{*{extends file='default/base.tpl'}*}
 {block title append} サーチリスト{/block}
 {block main_contents}
     {if get_class($thread_list->getFirstRecord()) == Sdx_Null }
