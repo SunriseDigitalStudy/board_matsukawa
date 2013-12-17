@@ -27,10 +27,10 @@
 
         <br/>
         タグを選択<br/>
-        {foreach $tab_list as $tab}
+        {foreach $tag_list as $tag}
             <label>
-                <input type="checkbox" name="checkbox[]"  value={$tab->getId()}>
-                {$tab->getName()}  
+                <input type="checkbox" name="checkbox[]"  value={$tag->getId()}>
+                {$tag->getName()}  
             </label>
             <br/>  
         {/foreach}

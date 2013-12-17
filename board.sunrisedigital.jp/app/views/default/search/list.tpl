@@ -1,9 +1,42 @@
-{*{extends file='default/base.tpl'}*}
+{extends file='default/base.tpl'}
 {block title append} サーチリスト{/block}
 {block main_contents}
+    
+    <h3>検索フォーム</h3>
+    <form method="get" name="form1" id="form1" action="/search/list"> 
+        ジャンルを選択<br/>
+        <label>
+            <input type="radio" name="radio" value="">何も選択しない
+        </label>
+        <br/>
+        {foreach $genre_list as $genre}
+            <label>
+                <input type="radio" name="genre_id" value={$genre->getId()} {if {$genre->getId()} == {$genre_id}}checked="checked"{/if}>
+                {$genre->getName()}
+            </label>
+            <br/>  
+        {/foreach}
+
+        <br/>
+        タグを選択<br/>
+        {foreach $tag_list as $tag}
+            <label>
+                <input type="checkbox" name="tag_ids[]"  value={$tag->getId()} {if in_array($tag->getId(), $tag_ids)} checked="checked" {/if}>
+                {$tag->getName()}  
+            </label>
+            <br/>  
+        {/foreach}
+        <br/> 
+        <br/>
+        <input type="submit" value="検索する">
+    </form>
+    <h3>検索結果</h3>
+    <div id="content"></div>
+    
+    {if $tag_ids || $genre_id}
     {if get_class($thread_list->getFirstRecord()) == Sdx_Null }
         検索条件に一致するスレッドはありません<br/>
-        <a href="/genre3/list">戻る</a>
+        <a href="/search/list">戻る</a>
     {else}
         <ul>
             {foreach $thread_list as $thread}
@@ -14,6 +47,7 @@
             </li>        
         {/foreach}
     </ul>
+{/if}
 {/if}
 
 {/block} 
