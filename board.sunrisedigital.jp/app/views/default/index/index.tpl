@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href='http://fonts.googleapis.com/css?family=Montserrat+Subrayada' rel='stylesheet' type='text/css'>
   <style>
     .sdx_error{
       font-size: 12px;
@@ -16,6 +17,10 @@
     .sdx_error > li:before{
       content: "\f14a";
       font-family: FontAwesome;
+    }
+    .container p{
+        font-family: 'Montserrat Subrayada', sans-serif;
+        
     }
   </style>
   {block css}{/block}
@@ -34,7 +39,7 @@
   </header>
   <section>
     <div class="container">
-        <div><a href="http://board.sunrisedigital.jp/genre3/list"><p style="font-size:1500%"color="black">３ちゃんねる入口</p></a></div>
+        <div><a href="http://board.sunrisedigital.jp/search/list"><p style="font-size:1500%"color="black" >3ch</p></a></div>
     </div>
   </section>
 </body>
