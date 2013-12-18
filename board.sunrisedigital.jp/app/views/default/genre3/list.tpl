@@ -11,10 +11,10 @@
     <br/> 
 
     <h3>検索フォーム</h3>
-    <form method="get" action="/search/list"> 
+    <form method="get" name="form1" id="form1" action="javascript:void(0);"> 
         ジャンルを選択<br/>
         <label>
-            <input type="radio" name="radio" value=null>何も選択しない
+            <input type="radio" name="radio" value="">何も選択しない
         </label>
         <br/>
         {foreach $genre_list as $genre}
@@ -24,19 +24,52 @@
             </label>
             <br/>  
         {/foreach}
-        
+
         <br/>
         タグを選択<br/>
-        {foreach $tab_list as $tab}
+        {foreach $tag_list as $tag}
             <label>
-                <input type="checkbox" name="checkbox[]" value={$tab->getId()}>
-                {$tab->getName()}  
+                <input type="checkbox" name="checkbox[]"  value={$tag->getId()}>
+                {$tag->getName()}  
             </label>
             <br/>  
         {/foreach}
         <br/> 
         <br/>
-        <input type="submit" value="検索する">
+{*        <input type="submit" value="検索する">*}
     </form>
+    <h3>検索結果</h3>
+    <div id="content"></div>
+
+
+    <script>
+        $(document).ready(function()
+        {
+            $('#form1').click(function() {
+
+                    var $form = $("#form1");
+                    var formVal = $form.serialize();
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/search/list",
+                        data: formVal,
+                        success: function(data)
+                        {
+                            $('#content').html(data);
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown)
+                        {
+                            alert('Error : ' + errorThrown);
+                        }
+                    });
+
+                });
+{*            $('#form1').submit(function() {       
+
+            });*}
+        });
+
+    </script>
 
 {/block}

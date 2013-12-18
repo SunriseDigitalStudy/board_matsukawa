@@ -25,13 +25,13 @@ class Genre3Controller extends Sdx_Controller_Action_Http {
         
         
         /*
-         * tagリスト表示
+         * tagリスト表示 
          */
-        $t_tab = Bd_Orm_Main_Tag::createTable();
-        $select = $t_tab->getSelect();
+        $t_tag = Bd_Orm_Main_Tag::createTable();
+        $select = $t_tag->getSelect();
         $select->order('name DESC');
-        $tab_list = $t_tab->fetchAll($select);
-        $this->view->assign('tab_list', $tab_list);
+        $tag_list = $t_tag->fetchAll($select);
+        $this->view->assign('tag_list', $tag_list);
         
         
         
