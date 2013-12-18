@@ -39,7 +39,7 @@
   </header>
   <section>
     <div class="container">
-        <div><a href="http://board.sunrisedigital.jp/genre3/list"><p style="font-size:1500%"color="black" >3ch</p></a></div>
+        <div><a href="http://board.sunrisedigital.jp/search/list"><p style="font-size:1500%"color="black" >3ch</p></a></div>
     </div>
   </section>
 </body>
