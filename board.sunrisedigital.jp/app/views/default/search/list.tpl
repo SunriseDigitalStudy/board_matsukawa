@@ -5,12 +5,11 @@
 
   {$form->renderStartTag() nofilter}
   <div class="form-group">
-    {$form.genre_id->render() nofilter}
+    {$form.genre_id->setDefaultEmptyChild('何も選択しない')->render() nofilter}
     <br/>
     {$form.tag_ids->render() nofilter}
     <br/>
     <button type="submit" class="btn">検索<i class="glyphicon glyphicon-hand-left"></i></button>
-    {*　　<input type="submit" value="検索する" class="btn-primary">*}
   </div>
 </form>
 
