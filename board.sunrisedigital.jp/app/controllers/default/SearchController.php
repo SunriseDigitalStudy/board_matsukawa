@@ -9,35 +9,6 @@ class SearchController extends Sdx_Controller_Action_Http {
      * Sdx_Formで入力フォームを作成
      */
 
-    //genreリストの取得
-    $t_genre = Bd_Orm_Main_Genre::createTable();
-    $select = $t_genre->getSelect();
-    $select->order('sequence DESC');
-    $genre_list = $t_genre->fetchAll($select);
-
-    //tagリストの取得
-    $t_tag = Bd_Orm_Main_Tag::createTable();
-    $select = $t_tag->getSelect();
-    $select->order('name DESC');
-    $tag_list = $t_tag->fetchAll($select);
-
-    //リストデータをaddChildren()の引数に渡すためにデータを配列に変換
-    //キーがValueで値がLabelの連想配列
-    //取得したジャンルの全リストデータ($genre_list)を$genre_ids_namesに代入
-    $genre_ids_names = array();
-    foreach ($genre_list as $genre) {
-      $genre_ids_names[$genre->getId()] = $genre->getName();
-    }
-    //何も選択しない項目のラジオボタンのlabelとvalueを追加
-    $genre_ids_names[""] = "何も選択しない";
-
-    //取得したタグの全リストデータ($tag_list)を$tag_ids_namesに代入
-    $tag_ids_names = array();
-    foreach ($tag_list as $tag) {
-      $tag_ids_names[$tag->getId()] = $tag->getName();
-    }
-
-
     $form = new Sdx_Form();
     $form
             ->setActionCurrentPage() //Action先を現在のURLに指定
@@ -45,12 +16,16 @@ class SearchController extends Sdx_Controller_Action_Http {
     //各フォームにエレメントをセット
     //ジャンル選択ラジオボタン
     $elems = new Sdx_Form_Element_Group_Radio();
-    $elems->setName('genre_id')->addChildren($genre_ids_names);
+    $elems->setDefaultEmptyChild('何も選択しない');
+    $elems->setName('genre_id')->addChildren(Bd_Orm_Main_Genre::createTable()->getSelect()
+          ->setColumns(array('id', 'name'))->fetchPairs());
+    
     $form->setElement($elems);
 
     //タグ選択チェックボックス
     $elems = new Sdx_Form_Element_Group_Checkbox();
-    $elems->setName('tag_ids[]')->addChildren($tag_ids_names);
+    $elems->setName('tag_ids[]')->addChildren(Bd_Orm_Main_Tag::createTable()->getselect()
+          ->setColumns(array('id', 'name'))->fetchPairs());
     $form->setElement($elems);
 
     //選択された値(チェック)がsubmit後のページに反映されるようにする処理
