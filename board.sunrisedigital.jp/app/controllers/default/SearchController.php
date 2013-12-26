@@ -16,10 +16,9 @@ class SearchController extends Sdx_Controller_Action_Http {
     //各フォームにエレメントをセット
     //ジャンル選択ラジオボタン
     $elems = new Sdx_Form_Element_Group_Radio();
-    $elems->setDefaultEmptyChild('何も選択しない');
+//    $elems->setDefaultEmptyChild('何も選択しない');
     $elems->setName('genre_id')->addChildren(Bd_Orm_Main_Genre::createTable()->getSelect()
-          ->setColumns(array('id', 'name'))->fetchPairs());
-    
+          ->setColumns(array('id', 'name'))->fetchPairs());    
     $form->setElement($elems);
 
     //タグ選択チェックボックス
