@@ -10,6 +10,7 @@
           <h3>検索フォーム</h3>
         </div>
         <div class="panel-body point-delete">
+          {$form->renderStartTag() nofilter}
           <h3><span class="label label-default">ジャンル選択</span></h3>
           {$form.genre_id->setDefaultEmptyChild('何も選択しない')->render() nofilter}
           <h3><span class="label label-default">タグ選択</span></h3>
@@ -26,13 +27,13 @@
         </div>
         <div class="panel-body">
           {if get_class($thread_list->getFirstRecord()) == Sdx_Null }
-            検索条件に一致するスレッドはありません<br/>
-            <a href="/search/list">戻る</a>
+            <p style="font-size:200%">検索条件に一致するスレッドはありません</p><br/>
+            <p><img src="/img/20081221231807.jpg" alt="やる夫3"></p>
           {else}
             <ul>
               {foreach $thread_list as $thread}
                 <li>
-                  <span><a href="/entry3/{$thread->getId()}/list">{$thread->getTitle()}</a></span>
+                  <span style="font-size:130%"><a href="/entry3/{$thread->getId()}/list">{$thread->getTitle()}</a></span>
                   &nbsp;
                 {if $thread->get('updated')}{$thread->getZendDate('updated')->get('yyyy年MM月dd日(E) HH時mm分ss秒')}{else}コメントは一件もありません{/if}
               </li>        
@@ -41,9 +42,9 @@
         {/if}
       </div>     
     </div>
-
-      <p><img src="/img/20110224223407740.png" alt="やる夫2"></p>
-      <p><img src="/img/20081221231807.jpg" alt="やる夫3"></p>
+      
+      <p style="font-size:200%"><img src="/img/20110224223407740.png" alt="やる夫2">自由に書き込んだらいいお</p>
+      
       
   </div>
 </div>
