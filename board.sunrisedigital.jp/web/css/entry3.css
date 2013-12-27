@@ -11,3 +11,6 @@ p.newline {width:800px;  word-wrap: break-word;}
 body {font-family: "ＭＳ Ｐゴシック",sans-serif;;}
 body {line-height: 1.0;}
 span{display: inline-block; width: 17em;}
+.point-delete ul{
+  list-style-type: none;/*リストの「・」を消す*/
+}
