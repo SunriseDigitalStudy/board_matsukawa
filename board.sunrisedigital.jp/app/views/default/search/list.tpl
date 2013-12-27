@@ -9,8 +9,7 @@
         <div class="panel-heading">
           <h3>検索フォーム</h3>
         </div>
-        <div class="panel-body">
-          {$form->renderStartTag() nofilter}
+        <div class="panel-body point-delete">
           <h3><span class="label label-default">ジャンル選択</span></h3>
           {$form.genre_id->setDefaultEmptyChild('何も選択しない')->render() nofilter}
           <h3><span class="label label-default">タグ選択</span></h3>
