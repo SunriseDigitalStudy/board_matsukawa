@@ -23,7 +23,7 @@ class SearchController extends Sdx_Controller_Action_Http {
 
     //タグ選択チェックボックス
     $elems = new Sdx_Form_Element_Group_Checkbox();
-    $elems->setName('tag_ids[]')->addChildren(Bd_Orm_Main_Tag::createTable()->getselect()
+    $elems->setName('tag_ids')->addChildren(Bd_Orm_Main_Tag::createTable()->getselect()
           ->setColumns(array('id', 'name'))->fetchPairs());
     $form->setElement($elems);
 
