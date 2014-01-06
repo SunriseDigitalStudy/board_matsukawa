@@ -1,4 +1,5 @@
 model:        Bd_Orm_Main_Thread
+
 page_name:    Thread
  
 navi:
@@ -52,3 +53,4 @@ list:
  
     - label:     削除
       action:    delete
+
