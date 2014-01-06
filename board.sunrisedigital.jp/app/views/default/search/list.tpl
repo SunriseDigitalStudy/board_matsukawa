@@ -16,6 +16,7 @@
           <h3><span class="label label-default">タグ選択</span></h3>
           {$form.tag_ids->render() nofilter}
           <button type="submit" class="btn btn-success"><b>検索</b><i class="glyphicon glyphicon-hand-left"></i></button>
+          <input type="reset" value="リセット">
           </form>
         </div>
       </div>
