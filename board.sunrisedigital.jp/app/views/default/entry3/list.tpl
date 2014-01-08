@@ -40,8 +40,7 @@
       if($(this).scrollTop() > 60){
         $('#back-to-top').fadeIn();
       }else{
-        $('#back-to-top').fadeOut();
-        
+        $('#back-to-top').fadeOut();        
       }
     });
     //#back-to-topがクリックされたら上に戻る

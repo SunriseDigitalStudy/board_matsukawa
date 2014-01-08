@@ -19,11 +19,9 @@ class SecureController extends Sdx_Controller_Action_Http
         if(isset($_SERVER['HTTP_REFERER'])){
           //ドメイン以下のURL(ルート相対パス(/～))を取得する処理
           $referer_url = parse_url($_SERVER['HTTP_REFERER']);
-          $host = $referer_url['host'];
-          $domain = 'http://'.$host.'/';
-          $root_relative_url = strtr($_SERVER['HTTP_REFERER'], array($domain => "/"));
+          $referer_path = $referer_url['path'];
           //セッションにURLを格納
-          if($root_relative_url !== '/secure/login'){                                     
+          if($referer_path !== '/secure/login'){                                     
             $_SESSION['referer_url'] = $_SERVER['HTTP_REFERER'];
           }  
         }
