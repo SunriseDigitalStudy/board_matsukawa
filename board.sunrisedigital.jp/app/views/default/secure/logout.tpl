@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
                 <!-- 1秒後に移動する -->
-                <meta http-equiv="refresh" content="1; url=http://dev.board.sunrisedigital.jp/">
+                <meta http-equiv="refresh" content="1; url=/">
 		<title>Secure Signout</title>
 	</head>
 	<body>

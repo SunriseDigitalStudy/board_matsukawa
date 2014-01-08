@@ -17,13 +17,16 @@ class SecureController extends Sdx_Controller_Action_Http
         //ログイン後に遷移元(ログインページの前のページ)に戻る
         //url直入力でログインページに来た場合は、前のページのurlのデータはないのでsessionへ値を入れる処理をしないようにする
         if(isset($_SERVER['HTTP_REFERER'])){
-          if($_SERVER['HTTP_REFERER'] !== 'http://board.sunrisedigital.jp/secure/login'){                                     
-            Sdx_Debug::dump($_SERVER['HTTP_REFERER'],'$_SERVER2');
+          //ドメイン以下のURL(ルート相対パス(/～))を取得する処理
+          $referer_url = parse_url($_SERVER['HTTP_REFERER']);
+          $host = $referer_url['host'];
+          $domain = 'http://'.$host.'/';
+          $root_relative_url = strtr($_SERVER['HTTP_REFERER'], array($domain => "/"));
+          //セッションにURLを格納
+          if($root_relative_url !== '/secure/login'){                                     
             $_SESSION['referer_url'] = $_SERVER['HTTP_REFERER'];
           }  
         }
-//        $this->_helper->secure->login($_SESSION['referer_url']);
-        
         //url直入力でログインページに来た場合は、ログイン後、トップページに飛ぶようにする
         if(isset($_SESSION['referer_url'])){
           $this->_helper->secure->login($_SESSION['referer_url']);
