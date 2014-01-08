@@ -100,6 +100,7 @@ class SearchController extends Sdx_Controller_Action_Http {
     $thread_list = $t_thread->fetchAll($select_th);
     //テンプレにアサイン
     $this->view->assign('thread_list', $thread_list);
+    
   }
-
+  
 }

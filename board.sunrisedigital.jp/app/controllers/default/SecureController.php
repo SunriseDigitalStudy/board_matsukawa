@@ -12,7 +12,24 @@ class SecureController extends Sdx_Controller_Action_Http
 	public function loginAction()
 	{
 		$this->_initHelper();
-		$this->_helper->secure->login("/");
+        
+        //ログイン後にトップページに飛ばないようにする
+        //ログイン後に遷移元(ログインページの前のページ)に戻る
+        //url直入力でログインページに来た場合は、前のページのurlのデータはないのでsessionへ値を入れる処理をしないようにする
+        if(isset($_SERVER['HTTP_REFERER'])){
+          if($_SERVER['HTTP_REFERER'] !== 'http://board.sunrisedigital.jp/secure/login'){                                     
+            Sdx_Debug::dump($_SERVER['HTTP_REFERER'],'$_SERVER2');
+            $_SESSION['referer_url'] = $_SERVER['HTTP_REFERER'];
+          }  
+        }
+//        $this->_helper->secure->login($_SESSION['referer_url']);
+        
+        //url直入力でログインページに来た場合は、ログイン後、トップページに飛ぶようにする
+        if(isset($_SESSION['referer_url'])){
+          $this->_helper->secure->login($_SESSION['referer_url']);
+        }else{
+          $this->_helper->secure->login('/');
+        }
 	}
 	
 	public function logoutAction()
