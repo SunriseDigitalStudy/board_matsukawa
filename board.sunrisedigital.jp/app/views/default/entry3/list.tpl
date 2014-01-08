@@ -30,4 +30,27 @@
   <input type="submit" name="submit" value="送信" class="btn btn-success">
 </form>
 {/if}
+<div id="back-to-top" style="position: fixed; right: 5px; bottom: 5px; font-size:400%"><a href="#">㊤</a></div>
+<script>
+  $(function(){
+    //#back-to-topを消す
+    $('#back-to-top').hide();
+    //スクロールが十分されたら、#back-to-topを表示、スクロールが戻ったら非表示
+    $(window).scroll(function(){
+      if($(this).scrollTop() > 60){
+        $('#back-to-top').fadeIn();
+      }else{
+        $('#back-to-top').fadeOut();
+        
+      }
+    });
+    //#back-to-topがクリックされたら上に戻る
+    $('#back-to-top a').click(function (){
+      $('body').animate({
+        scrollTop:0
+    }, 500);
+    return false;
+    });
+  });
+</script>
 {/block}
