@@ -16,15 +16,20 @@ class SearchController extends Sdx_Controller_Action_Http {
     //各フォームにエレメントをセット
     //ジャンル選択ラジオボタン
     $elems = new Sdx_Form_Element_Group_Radio();
-//    $elems->setDefaultEmptyChild('何も選択しない');
-    $elems->setName('genre_id')->addChildren(Bd_Orm_Main_Genre::createTable()->getSelect()
-          ->setColumns(array('id', 'name'))->fetchPairs());    
+    $genre_list = Bd_Orm_Main_Genre::createTable()
+            ->getSelect()
+            ->setColumns(array('id', 'name'))
+            ->fetchPairs();    
+    $elems->setName('genre_id')->addChildren($genre_list);    
     $form->setElement($elems);
 
     //タグ選択チェックボックス
     $elems = new Sdx_Form_Element_Group_Checkbox();
-    $elems->setName('tag_ids')->addChildren(Bd_Orm_Main_Tag::createTable()->getselect()
-          ->setColumns(array('id', 'name'))->fetchPairs());
+    $tag_list = Bd_Orm_Main_Tag::createTable()
+            ->getselect()
+            ->setColumns(array('id', 'name'))
+            ->fetchPairs();
+    $elems->setName('tag_ids')->addChildren($tag_list);
     $form->setElement($elems);
 
     //選択された値(チェック)がsubmit後のページに反映されるようにする処理
