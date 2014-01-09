@@ -27,7 +27,7 @@
   {$form.body->setLabel('コメント')->renderLabel() nofilter}
   {$form.body->render([class=>"form-control", placeholder=>"ゆっくりしていってね∩( ´∀｀)∩ヽ(〃´∀｀〃)ﾉ"]) nofilter}
   {$form.body->renderError() nofilter}
-  <input type="submit" name="submit" value="送信" class="btn btn-success">
+  <input type="submit" name="submit" value="送信" id='bottom' class="btn btn-success">
 </form>
 {/if}
 <div id="back-to-top" style="position: fixed; right: 5px; bottom: 5px; font-size:400%"><a href="#">㊤</a></div>
