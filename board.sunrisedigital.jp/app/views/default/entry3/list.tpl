@@ -21,13 +21,37 @@
     {$form.body->setLabel('コメント')->renderLabel() nofilter}
     {$form.body->render([class=>"form-control", placeholder=>"ゆっくりしていってね∩( ´∀｀)∩ヽ(〃´∀｀〃)ﾉ", disabled=>"true"]) nofilter}       
     <input type="submit" name="submit" value="送信" disabled="true" class="btn btn-success">
+    <a class="btn btn-primary" href="http://board.sunrisedigital.jp/search/list">検索ページに戻る</a>
   </form>
 {else} 
   {$form->renderStartTag() nofilter}  
   {$form.body->setLabel('コメント')->renderLabel() nofilter}
   {$form.body->render([class=>"form-control", placeholder=>"ゆっくりしていってね∩( ´∀｀)∩ヽ(〃´∀｀〃)ﾉ"]) nofilter}
   {$form.body->renderError() nofilter}
-  <input type="submit" name="submit" value="送信" class="btn btn-success">
+  <input type="submit" name="submit" value="送信" id='bottom' class="btn btn-success">
+  <a class="btn btn-primary" href="http://board.sunrisedigital.jp/search/list">検索ページに戻る</a>
 </form>
 {/if}
+<div id="back-to-top" style="position: fixed; right: 5px; bottom: 5px; font-size:400%"><a href="#">㊤</a></div>
+<script>
+  $(function(){
+    //#back-to-topを消す
+    $('#back-to-top').hide();
+    //スクロールが十分されたら、#back-to-topを表示、スクロールが戻ったら非表示
+    $(window).scroll(function(){
+      if($(this).scrollTop() > 60){
+        $('#back-to-top').fadeIn();
+      }else{
+        $('#back-to-top').fadeOut();        
+      }
+    });
+    //#back-to-topがクリックされたら上に戻る
+    $('#back-to-top a').click(function (){
+      $('body').animate({
+        scrollTop:0
+    }, 500);
+    return false;
+    });
+  });
+</script>
 {/block}

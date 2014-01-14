@@ -2,8 +2,8 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-                <!-- 5秒後に移動する -->
-                <meta http-equiv="refresh" content="2; url=http://dev.board.sunrisedigital.jp/">
+                <!-- 1秒後に移動する -->
+                <meta http-equiv="refresh" content="1; url=/">
 		<title>Secure Signout</title>
 	</head>
 	<body>

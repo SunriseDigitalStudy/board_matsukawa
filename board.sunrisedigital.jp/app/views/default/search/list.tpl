@@ -3,8 +3,8 @@
 {block main_contents}
 
   <div class="row">
+    
     <div class="col-sm-4">
-
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3>検索フォーム</h3>
@@ -16,10 +16,12 @@
           <h3><span class="label label-default">タグ選択</span></h3>
           {$form.tag_ids->render() nofilter}
           <button type="submit" class="btn btn-success"><b>検索</b><i class="glyphicon glyphicon-hand-left"></i></button>
+          <input class="btn btn-danger clearForm" type="button" value="リセット">
           </form>
         </div>
       </div>
     </div>
+          
     <div class="col-sm-8">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -41,12 +43,16 @@
           </ul>
         {/if}
       </div>     
-    </div>
-      
-      <p style="font-size:200%"><img src="/img/20110224223407740.png" alt="やる夫2">自由に書き込んだらいいお</p>
-      
-      
+    </div>      
+      <p style="font-size:200%"><img src="/img/20110224223407740.png" alt="やる夫2">自由に書き込んだらいいお</p>     
   </div>
+      
 </div>
-
+      
+<script>
+  $(".clearForm").bind("click", function(){
+          $(this.form).find(":checked").prop("checked", false);
+  });
+</script>
+        
 {/block} 
