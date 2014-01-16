@@ -43,19 +43,21 @@ class SearchController extends Sdx_Controller_Action_Http {
     if (isset($_SERVER['HTTP_REFERER'])) {
       $referer_url = parse_url($_SERVER['HTTP_REFERER']);
       $referer_path = $referer_url['path'];
-      //$referer_pathはカスタムルートのため、条件分岐できるように、文字列'entry3'だけを抜き取る。
-      $entry3 = substr($referer_path, 1, 6);
+      //$referer_pathはカスタムルートのため、条件分岐できるように、文字列'entry3'だけを抜き取って使う。
+      $path_name = substr($referer_path, 1, 6);
     }
     
     //sessionにパラメータを保存。entryページからのリンクの場合はsessionに値が上書きされないようにする。
     $session = new Zend_Session_Namespace('search');
-    if('entry3' !== $entry3){
+    if('entry3' !== $path_name){
       $session->param = $this->_getAllParams();
     }
 
     //パラメータを入力フォームにバインド
-    if('entry3' == $entry3){
-      $form->bind($session->param);
+    if('entry3' == $path_name){
+      if (isset($session->param)) {
+        $form->bind($session->param);
+      }
     }else{
       $form->bind($this->_getAllParams());
     }    
