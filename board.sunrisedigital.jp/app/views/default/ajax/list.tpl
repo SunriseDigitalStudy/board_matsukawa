@@ -3,7 +3,7 @@
 {block title append} Ajaxリスト{/block}
 {block main_contents}
   <div class="row">
-    
+
     <div class="col-sm-4">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-          
+
     <div class="col-sm-8">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -31,7 +31,7 @@
           {if get_class($thread_list->getFirstRecord()) == Sdx_Null }
             <p style="font-size:200%">検索条件に一致するスレッドはありません</p><br/>
             <p><img src="/img/20081221231807.jpg" alt="やる夫3"></p>
-          {else}
+            {else}
             <ul>
               {foreach $thread_list as $thread}
                 <li>
@@ -44,15 +44,16 @@
         {/if}
       </div>     
     </div>      
-      <p style="font-size:200%"><img src="/img/20110224223407740.png" alt="やる夫2">自由に書き込んだらいいお</p>     
+    <p style="font-size:200%"><img src="/img/20110224223407740.png" alt="やる夫2">自由に書き込んだらいいお</p>     
   </div>
 
 
   <script>
-    $(document).ready(function(){
-      
+    $(document).ready(function() {
+
+    {*ajax通信*}
       $('#form1').submit(function(event) {
-        event.preventDefault(); 
+        event.preventDefault();
         var $form = $("#form1");
         var formVal = $form.serialize();
 
@@ -69,16 +70,15 @@
             alert('Error : ' + errorThrown);
           }
         });
-        
-      });
-      
-    });
-    
- 
-  $(".clearForm").bind("click", function(){
-          $(this.form).find(":checked").prop("checked", false);
-  });
 
+      });
+
+    });
+
+    {*選択されたラジオボタン、チェックボックスのチェックをリセット*}
+    $(".clearForm").bind("click", function() {
+      $(this.form).find(":checked").prop("checked", false);
+    });
 
   </script>
 </div>
