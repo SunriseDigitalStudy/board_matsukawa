@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="col-sm-8">
+    <div class="col-sm-8" id="content">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3>検索結果(スレッド一覧)</h3>
@@ -46,13 +46,14 @@
     </div>      
     <p style="font-size:200%"><img src="/img/20110224223407740.png" alt="やる夫2">自由に書き込んだらいいお</p>     
   </div>
-
+      
 
   <script>
     $(document).ready(function() {
 
     {*ajax通信*}
-      $('#form1').submit(function(event) {
+ 
+     $('#form1').submit(function(event) {
         event.preventDefault();
         var $form = $("#form1");
         var formVal = $form.serialize();
@@ -63,7 +64,7 @@
           data: formVal,
           success: function(data)
           {
-            $('#content').html(data);
+            $("#content").html($('#content', data).html());
           },
           error: function(XMLHttpRequest, textStatus, errorThrown)
           {
@@ -74,7 +75,6 @@
       });
 
     });
-
     {*選択されたラジオボタン、チェックボックスのチェックをリセット*}
     $(".clearForm").bind("click", function() {
       $(this.form).find(":checked").prop("checked", false);
