@@ -36,8 +36,8 @@ class AjaxController extends Sdx_Controller_Action_Http{
     $genre_list = Bd_Orm_Main_Genre::createTable()
             ->getSelect()
             ->setColumns(array('id', 'name'))
-            ->fetchPairs();    
-    $elems->setName('genre_id')->addChildren($genre_list);    
+            ->fetchPairs();
+    $elems->setName('genre_id')->addChildren($genre_list);
     $form->setElement($elems);
 
     //タグ選択チェックボックス
@@ -102,7 +102,7 @@ class AjaxController extends Sdx_Controller_Action_Http{
     $tag_ids = $this->_getParam('tag_ids');
 
     //並び順用サブクエリの作成
-    //SELECT thread_id, Max(updated_at) AS updated  FROM entry GROUP BY thread_id           
+    //SELECT thread_id, Max(updated_at) AS updated  FROM entry GROUP BY thread_id
     $t_entry = Bd_Orm_Main_Entry::createTable();
     $select_en = $t_entry->getSelect();
     $select_en->resetColumns()
