@@ -15,7 +15,7 @@
           {$form.genre_id->setDefaultEmptyChild('何も選択しない')->render() nofilter}
           <h3><span class="label label-default">タグ選択</span></h3>
           {$form.tag_ids->render() nofilter}
-          <button type="submit" class="btn btn-success"><b>検索</b><i class="glyphicon glyphicon-hand-left"></i></button>
+          <button type="submit" name="submit" value="submit" class="btn btn-success"><b>検索</b><i class="glyphicon glyphicon-hand-left"></i></button>
           <input class="btn btn-danger clearForm" type="button" value="リセット">
           </form>
         </div>

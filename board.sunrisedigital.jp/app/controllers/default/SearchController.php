@@ -19,8 +19,8 @@ class SearchController extends Sdx_Controller_Action_Http {
     $genre_list = Bd_Orm_Main_Genre::createTable()
             ->getSelect()
             ->setColumns(array('id', 'name'))
-            ->fetchPairs();    
-    $elems->setName('genre_id')->addChildren($genre_list);    
+            ->fetchPairs();
+    $elems->setName('genre_id')->addChildren($genre_list);
     $form->setElement($elems);
 
     //タグ選択チェックボックス
@@ -31,36 +31,23 @@ class SearchController extends Sdx_Controller_Action_Http {
             ->fetchPairs();
     $elems->setName('tag_ids')->addChildren($tag_list);
     $form->setElement($elems);
-    
-    
+
+
     /*
      * 選択された値(チェック)が他ページから遷移してきた時に反映されるようにする処理
      * search/listから飛んで来た場合とentry3/listから飛んで来た場合で条件分岐
      */
-    $entry3 = null;
-    
-    //条件分岐するために、リンク元のURLを取得
-    if (isset($_SERVER['HTTP_REFERER'])) {
-      $referer_url = parse_url($_SERVER['HTTP_REFERER']);
-      $referer_path = $referer_url['path'];
-      //$referer_pathはカスタムルートのため、条件分岐できるように、文字列'entry3'だけを抜き取って使う。
-      $path_name = substr($referer_path, 1, 6);
-    }
-    
-    //sessionにパラメータを保存。entryページからのリンクの場合はsessionに値が上書きされないようにする。
-    $session = new Zend_Session_Namespace('search');
-    if('entry3' !== $path_name){
-      $session->param = $this->_getAllParams();
+    $session = new Zend_Session_Namespace('SearchController_listAction');
+
+    if ($this->_getParam('submit')) {
+      $session->params = $this->_getAllParams();
+    } else if ($session->params) {
+      foreach ($session->params as $key => $value) {
+        $this->_setParam($key, $value);
+      }
     }
 
-    //パラメータを入力フォームにバインド
-    if('entry3' == $path_name){
-      if (isset($session->param)) {
-        $form->bind($session->param);
-      }
-    }else{
-      $form->bind($this->_getAllParams());
-    }    
+    $form->bind($this->_getAllParams());
 
     $this->view->assign('form', $form);
 
@@ -132,7 +119,6 @@ class SearchController extends Sdx_Controller_Action_Http {
     $thread_list = $t_thread->fetchAll($select_th);
     //テンプレにアサイン
     $this->view->assign('thread_list', $thread_list);
-    
   }
-  
+
 }
