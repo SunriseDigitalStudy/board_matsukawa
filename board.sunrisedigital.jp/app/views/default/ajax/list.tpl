@@ -57,8 +57,11 @@
 {block js}
   <script>
     $(function() {
-
-      paging();      
+      
+      /*
+       * リストをページングする
+       */
+      paging();
 
       /*
        * 複数条件検索処理
@@ -90,7 +93,8 @@
 
       //リストをページングするメソッド
       function paging() {
-        var number = 5; //ここでは定数的な扱い　IEではconstがサポートされていないのでconstは使わない方向
+        
+        var number = 10; //ここでは定数的な扱い　IEではconstがサポートされていないのでconstは使わない方向
         var page = 1; //ページ数
         var limit = number; //1ページあたりに表示する件数
 
@@ -124,8 +128,8 @@
           for (count; count < limit; count++) {
             $('ul#aaa > li').eq(count).show();
           }
-
         }
+        
       }
       
       /*

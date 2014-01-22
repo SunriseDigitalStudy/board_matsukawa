@@ -11,22 +11,17 @@ class SecureController extends Sdx_Controller_Action_Http
 {
 	public function loginAction()
 	{
-		$this->_initHelper();
+        $this->_initHelper();
         
         //ログイン後にトップページに飛ばないようにする
         //ログイン後に遷移元(ログインページの前のページ)に戻る
         //url直入力でログインページに来た場合は、前のページのurlのデータはないのでsessionへ値を入れる処理をしないようにする
-        $session = new Zend_Session_Namespace('url');
+        $session = new Zend_Session_Namespace('SECURE_LOGIN_REFERER');
         
-        if(isset($_SERVER['HTTP_REFERER'])){
-          //ドメイン以下のURL(ルート相対パス(/～))を取得する処理
-          $referer_url = parse_url($_SERVER['HTTP_REFERER']);
-          $referer_path = $referer_url['path'];
-          //セッションにURLを格納
-          if($referer_path !== '/secure/login'){            
-            $session->referer_url = $_SERVER['HTTP_REFERER'];
-          }  
-        }    
+        if(!$this->_getParam('submit')){
+          $session->referer_url = $_SERVER['HTTP_REFERER'];
+        }
+ 
         //url直入力でログインページに来た場合は、ログイン後、トップページに飛ぶようにする
         if(isset($session->referer_url)){
           $this->_helper->secure->login($session->referer_url);

@@ -104,9 +104,11 @@ class AccountController extends Sdx_Controller_Action_Http {
                     $account->save();
 
 
-                    $db->commit();
-
-
+                    $db->commit();                   
+                   
+                    $aaa = new Bd_Auth_Adapter_Db($this->_getParam('login_id'), $this->_getParam('password'));
+            Sdx_Debug::dump($aaa->authenticate(),'$aaa');
+            
                     $this->redirectAfterSave('/account/create');
                 } else {
                     $db->rollback();
@@ -115,9 +117,15 @@ class AccountController extends Sdx_Controller_Action_Http {
                 $db->rollback();
                 throw $e;
             }
+            
+            
+            
         }
 
         $this->view->assign('form', $form);
+        
+        
+        
     }
 
 }
