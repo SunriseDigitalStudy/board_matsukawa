@@ -29,7 +29,7 @@
   {$form.body->setLabel('コメント')->renderLabel() nofilter}
   {$form.body->render([class=>"form-control", placeholder=>"ゆっくりしていってね∩( ´∀｀)∩ヽ(〃´∀｀〃)ﾉ"]) nofilter}
   {$form.body->renderError() nofilter}
-  <input type="submit" name="submit" value="送信" id='bottom' class="btn btn-success">
+  <input type="submit" name="submit" value="送信" id='form' class="btn btn-success">
 {*  <a class="btn btn-primary" href="/search/list">検索ページに戻る</a>*}
   <a class="btn btn-primary" href="/ajax/list">検索ページに戻る</a>
 </form>
