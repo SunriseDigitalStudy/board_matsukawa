@@ -64,7 +64,6 @@ class Entry3Controller extends Sdx_Controller_Action_Http {
      * submit時のデータ処理 
      */
     if ($this->_getParam('submit')) {
-      Sdx_Debug::dump($this->_getParam('submit'), 'submit');
 
       //ログインユーザー以外からのPOSTの場合
       if (Sdx_Context::getInstance()->getUser()->hasId() == null) {
@@ -106,7 +105,7 @@ class Entry3Controller extends Sdx_Controller_Action_Http {
 
           $db->commit();
 
-          $this->redirectAfterSave('/entry3/' . $thread_id . '/list');
+          $this->redirectAfterSave('/entry3/' . $thread_id . '/list#bottom');
         } catch (Exception $e) {
           $db->rollback();
           throw $e;
