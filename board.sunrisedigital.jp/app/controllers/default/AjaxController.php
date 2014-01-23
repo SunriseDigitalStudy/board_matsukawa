@@ -54,25 +54,17 @@ class AjaxController extends Sdx_Controller_Action_Http{
      * 選択された値(チェック)が他ページから遷移してきた時に反映されるようにする処理
      * search/listから飛んで来た場合とentry3/listから飛んで来た場合で条件分岐
      */
-    //条件分岐するために、リンク元のURLを取得
-    
-    if ($_SERVER['HTTP_REFERER']) {
-      $referer_url = parse_url($_SERVER['HTTP_REFERER']);
-      $referer_path = $referer_url['path'];
-      //$referer_pathはカスタムルートのため、条件分岐できるように、文字列'entry3'だけを抜き取る。
-      $entry3 = substr($referer_path, 1, 6);
-    }
-    
-    //sessionにパラメータを保存。entryページからのリンクの場合はsessionに値が上書きされないようにする。
-    $session = new Zend_Session_Namespace('search');
-    if('entry3' !== $entry3){
-      $session->param = $this->_getAllParams();
+    $session = new Zend_Session_Namespace('SearchController_listAction');
+
+    if ($this->_getParam('submit')) {
+      $session->params = $this->_getAllParams();
+    } else if ($session->params) {
+      foreach ($session->params as $key => $value) {
+        $this->_setParam($key, $value);
+      }
     }
 
-    //パラメータを入力フォームにバインド
-    if('entry3' == $entry3){
-      $form->bind($session->param);
-    }
+    $form->bind($this->_getAllParams());
 
     $this->view->assign('form', $form);
 
