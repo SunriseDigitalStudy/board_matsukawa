@@ -1,8 +1,23 @@
 <?php
 
-class SearchController extends Sdx_Controller_Action_Http {
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-  public function listAction() {
+/**
+ * Description of AjaxController
+ *
+ * @author Matsukawa
+ */
+class AjaxController extends Sdx_Controller_Action_Http{
+  
+  public function indexAction() {
+    $this->_disableViewRenderer();
+  }
+
+ public function listAction() {
 
 
     /*
@@ -11,8 +26,10 @@ class SearchController extends Sdx_Controller_Action_Http {
 
     $form = new Sdx_Form();
     $form
-            ->setActionCurrentPage() //Action先を現在のURLに指定
-            ->setMethodToPost();  //メソッドをPOSTに変更
+            ->setAction("javascript:void(0);") //Action先を現在のURLに指定
+            ->setMethodToPost()  //メソッドをPOSTに変更
+            ->setId('form1');
+            
     //各フォームにエレメントをセット
     //ジャンル選択ラジオボタン
     $elems = new Sdx_Form_Element_Group_Radio();
@@ -31,8 +48,8 @@ class SearchController extends Sdx_Controller_Action_Http {
             ->fetchPairs();
     $elems->setName('tag_ids')->addChildren($tag_list);
     $form->setElement($elems);
-
-
+    
+    
     /*
      * 選択された値(チェック)が他ページから遷移してきた時に反映されるようにする処理
      * search/listから飛んで来た場合とentry3/listから飛んで来た場合で条件分岐
@@ -77,7 +94,7 @@ class SearchController extends Sdx_Controller_Action_Http {
     $tag_ids = $this->_getParam('tag_ids');
 
     //並び順用サブクエリの作成
-    //SELECT thread_id, Max(updated_at) AS updated  FROM entry GROUP BY thread_id           
+    //SELECT thread_id, Max(updated_at) AS updated  FROM entry GROUP BY thread_id
     $t_entry = Bd_Orm_Main_Entry::createTable();
     $select_en = $t_entry->getSelect();
     $select_en->resetColumns()
@@ -111,14 +128,14 @@ class SearchController extends Sdx_Controller_Action_Http {
     //ジャンル条件で絞込み
     if ($genre_id) {
       $select_th
-              ->add('genre_id', $genre_id)
-              ->group('thread.id');
+              ->add('genre_id', $genre_id);
     }
 
     //sql発行
     $thread_list = $t_thread->fetchAll($select_th);
     //テンプレにアサイン
     $this->view->assign('thread_list', $thread_list);
+    
   }
-
+      
 }

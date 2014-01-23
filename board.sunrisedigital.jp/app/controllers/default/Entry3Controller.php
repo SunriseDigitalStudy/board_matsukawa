@@ -105,7 +105,7 @@ class Entry3Controller extends Sdx_Controller_Action_Http {
 
           $db->commit();
 
-          $this->redirectAfterSave('/entry3/' . $thread_id . '/list#bottom');
+          $this->redirectAfterSave('/entry3/' . $thread_id . '/list#form');
         } catch (Exception $e) {
           $db->rollback();
           throw $e;
