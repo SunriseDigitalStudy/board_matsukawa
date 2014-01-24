@@ -21,15 +21,17 @@
     {$form.body->setLabel('コメント')->renderLabel() nofilter}
     {$form.body->render([class=>"form-control", placeholder=>"ゆっくりしていってね∩( ´∀｀)∩ヽ(〃´∀｀〃)ﾉ", disabled=>"true"]) nofilter}       
     <input type="submit" name="submit" value="送信" disabled="true" class="btn btn-success">
-    <a class="btn btn-primary" href="/search/list">検索ページに戻る</a>
+{*    <a class="btn btn-primary" href="/search/list">検索ページに戻る</a>*}
+    <a class="btn btn-primary" href="/ajax/list">検索ページに戻る</a>
   </form>
 {else} 
   {$form->renderStartTag() nofilter}  
   {$form.body->setLabel('コメント')->renderLabel() nofilter}
   {$form.body->render([class=>"form-control", placeholder=>"ゆっくりしていってね∩( ´∀｀)∩ヽ(〃´∀｀〃)ﾉ"]) nofilter}
   {$form.body->renderError() nofilter}
-  <input type="submit" name="submit" value="送信" id='bottom' class="btn btn-success">
-  <a class="btn btn-primary" href="/search/list">検索ページに戻る</a>
+  <input type="submit" name="submit" value="送信" id='form' class="btn btn-success">
+{*  <a class="btn btn-primary" href="/search/list">検索ページに戻る</a>*}
+  <a class="btn btn-primary" href="/ajax/list">検索ページに戻る</a>
 </form>
 {/if}
 <div id="back-to-top" style="position: fixed; right: 5px; bottom: 5px; font-size:400%"><a href="#">㊤</a></div>
