@@ -32,8 +32,7 @@
   <script>
     $(function() {
 
-      var page = 1; //表示するページのナンバー　     
-      
+      var page = 1; //表示するページのナンバー
       ajax(page);
 
       /*
@@ -60,7 +59,6 @@
           data: formVal,
           success: function(data)
           {
-            //検索結果を出力している箇所のみを読み込んで出力する
             $("#content").html(data);
             //出力したHTMLにクリックイベントを実装
             click();
