@@ -9,7 +9,10 @@
             <p style="font-size:200%">検索条件に一致するスレッドはありません</p><br/>
             <p><img src="/img/20081221231807.jpg" alt="やる夫3"></p>
             {else}
-            <span id="back" class="glyphicon glyphicon-circle-arrow-left"></span><span id="page"></span><span id="next" class="glyphicon glyphicon-circle-arrow-right"></span><br/>
+            <ul class="pager">
+              <li class="previous"><a id="back">&larr; 前の5件</a></li>
+              <li class="next"><a id="next">次の5件 &rarr;</a></li>
+            </ul>
             <ul id="aaa">
               {foreach $thread_list as $thread}
                 <li>

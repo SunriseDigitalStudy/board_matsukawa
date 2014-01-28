@@ -11,13 +11,13 @@ p.newline {width:800px;  word-wrap: break-word;}
 body {font-family: "ＭＳ Ｐゴシック",sans-serif;}
 body {line-height: 1.0;}
 .entry_list{
-  display: inline-block; width: 17em; /*文字間隔調整*/
+  display: inline-block; width: 20em; /*文字間隔調整*/
 }
 .point-delete ul { list-style-type: none;/*リストの「・」マーカー文字を消す*/}
-#back,#number,#next {
-  margin: 10px 78px; /*文字列間隔調整　左の数値が縦　右の数値が横*/
+/*#back,#number,#next {
+  margin: 10px 78px; 文字列間隔調整　左の数値が縦　右の数値が横
   font-size:180%;
-}
+}*/
 #back,#next{
   cursor:pointer;
   /*#back,#nextにカーソルが乗った時、カーソルの形状をリンクカーソルに指定*/
