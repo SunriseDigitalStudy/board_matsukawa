@@ -1,4 +1,4 @@
-<div hidden id="offset">{$thread_count}</div>
+<div id="totalPage" data-total-page="{$thread_count}"></div>
   <div class="col-sm-8">
       <div class="panel panel-default">
         <div class="panel-heading">

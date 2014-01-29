@@ -71,10 +71,10 @@
       }
 
       function initPagingEvent() {
-        var number = Number($("#offset").text()); //HTML要素から、総データ件数を取得,整数に変換
-        var count = Math.ceil(number / 5); //総データ件数から総ページ数を割り出す
+        var number = Number($("#totalPage").data('total-page')); //HTML要素から、総データ件数を取得,整数に変換
+        var totalPage = Math.ceil(number / 5); //総データ件数から総ページ数を割り出す
         //次の件数を表示
-        if (page >= count) {
+        if (page >= totalPage) {
           $('#next').hide();
         }
         $('#next').click(function() {

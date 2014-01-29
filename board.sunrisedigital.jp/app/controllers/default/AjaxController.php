@@ -132,7 +132,7 @@ class AjaxController extends Sdx_Controller_Action_Http{
     //ページング処理に使う値
     define('LIMIT_NUMBER', '5'); //1ページあたりの表示件数
     $page = $this->_getParam('page'); //ページ数
-    $offset = ($page - 1) * LIMIT_NUMBER;  //表示開始ページ
+    $offset = ($page - 1) * LIMIT_NUMBER;  //表示開始ページナンバー
 
     //並び順用サブクエリの作成
     //SELECT thread_id, Max(updated_at) AS updated  FROM entry GROUP BY thread_id
