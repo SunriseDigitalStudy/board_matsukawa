@@ -41,7 +41,7 @@
       $('#form1').submit(function(event) {
         //submitイベントを無効化
         event.preventDefault();
-        //送る値ををクエリ文字列に変換
+        //レキシカル変数を初期化してajax関数に渡す
         page = 1;
         ajax(page);
       });
@@ -61,7 +61,7 @@
           {
             $("#content").html(data);
             //出力したHTMLにクリックイベントを実装
-            click();
+            initPagingEvent();
           },
           error: function(XMLHttpRequest, textStatus, errorThrown)
           {
@@ -70,15 +70,15 @@
         });
       }
 
-      function click() {
-        var number = Number($("#offset").text()); //HTML要素から、総データ件数を取得,数字に変換
+      function initPagingEvent() {
+        var number = Number($("#offset").text()); //HTML要素から、総データ件数を取得,整数に変換
         var count = Math.ceil(number / 5); //総データ件数から総ページ数を割り出す
         //次の件数を表示
         if (page >= count) {
           $('#next').hide();
         }
         $('#next').click(function() {
-          page++
+          page++;
           ajax(page);
         });
 
