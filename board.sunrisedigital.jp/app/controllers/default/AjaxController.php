@@ -82,23 +82,6 @@ class AjaxController extends Sdx_Controller_Action_Http{
             ->fetchPairs();
     $elems->setName('tag_ids')->addChildren($tag_list);
     $form->setElement($elems);
-    
-    
-    /*
-     * 選択された値(チェック)が他ページから遷移してきた時に反映されるようにする処理
-     * search/listから飛んで来た場合とentry3/listから飛んで来た場合で条件分岐
-     */
-    $session = new Zend_Session_Namespace('SearchController_listAction');
-
-    if ($this->_getParam('submit')) {
-      $session->params = $this->_getAllParams();
-    } else if ($session->params) {
-      foreach ($session->params as $key => $value) {
-        $this->_setParam($key, $value);
-      }
-    }
-
-    $form->bind($this->_getAllParams());
 
     $this->view->assign('form', $form);
 
