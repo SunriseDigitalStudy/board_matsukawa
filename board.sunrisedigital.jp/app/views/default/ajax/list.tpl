@@ -32,8 +32,8 @@
   <script>
     $(function() {
 
-      var page = 1; //表示するページのナンバー
-      ajax(page);
+      var firstPage = 1; //表示するページのナンバー
+      ajax(firstPage);
 
       /*
        *検索ボタンクリックアクション
@@ -41,9 +41,8 @@
       $('#form1').submit(function(event) {
         //submitイベントを無効化
         event.preventDefault();
-        //レキシカル変数を初期化してajax関数に渡す
-        page = 1;
-        ajax(page);
+        //変数firstPageはレキシカル変数
+        ajax(firstPage);
       });
 
 
@@ -68,28 +67,32 @@
             alert('Error : ' + errorThrown);
           }
         });
+        
       }
 
       function initPagingEvent() {
-        var number = Number($("#totalPage").data('total-page')); //HTML要素から、総データ件数を取得,整数に変換
-        var totalPage = Math.ceil(number / 5); //総データ件数から総ページ数を割り出す
+        
+        var nextPage = Number($("#page").data('next-page'));
+        var prevPage = Number($("#page").data('prev-page'));
+        
         //次の件数を表示
-        if (page >= totalPage) {
+        if (nextPage){
+          $('#next').click(function() {
+          ajax(nextPage);
+        });
+        }else{
           $('#next').hide();
         }
-        $('#next').click(function() {
-          page++;
-          ajax(page);
-        });
 
         //前の件数を表示
-        if (page <= 1) {
+        if (prevPage) {
+          $('#back').click(function() {
+          ajax(prevPage);
+        });
+        }else{
           $('#back').hide();
         }
-        $('#back').click(function() {
-          page--;
-          ajax(page);
-        });
+        
       }
 
       /*

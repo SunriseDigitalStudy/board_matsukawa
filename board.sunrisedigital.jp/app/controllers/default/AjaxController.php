@@ -19,7 +19,6 @@ class AjaxController extends Sdx_Controller_Action_Http{
 
  public function listAction() {
 
-
     /*
      * Sdx_Formで入力フォームを作成
      */
@@ -54,7 +53,6 @@ class AjaxController extends Sdx_Controller_Action_Http{
   }
   
   public function searchAction() {
-
 
     /*
      * Sdx_Formで入力フォームを作成
@@ -131,8 +129,7 @@ class AjaxController extends Sdx_Controller_Action_Http{
         
     //ページング処理に使う値
     define('LIMIT_NUMBER', '5'); //1ページあたりの表示件数
-    $page = $this->_getParam('page'); //ページ数
-    $offset = ($page - 1) * LIMIT_NUMBER;  //表示開始ページナンバー
+    $page = $this->_getParam('page'); //ページナンバー
 
     //並び順用サブクエリの作成
     //SELECT thread_id, Max(updated_at) AS updated  FROM entry GROUP BY thread_id
@@ -159,7 +156,7 @@ class AjaxController extends Sdx_Controller_Action_Http{
     $select_th
             ->joinLeft(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id')
             ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC')
-            ->limit(LIMIT_NUMBER, $offset);
+            ->limitpage($page, LIMIT_NUMBER);
     //タグ条件で絞込み
     if ($tag_ids) {
       $select_th
@@ -175,11 +172,13 @@ class AjaxController extends Sdx_Controller_Action_Http{
 
     //sql発行
     $thread_list = $t_thread->fetchAll($select_th);
-    $thread_count = $t_thread->count($select_th); //レコード件数の取得
+    $thread_count = $t_thread->count($select_th); //総レコード件数の取得
+    //Sdx_Pagerはページング情報
+    $Sdx_pager = new Sdx_Pager(LIMIT_NUMBER, $thread_count,'page');
     //テンプレにアサイン
     $this->view->assign('thread_list', $thread_list);
-    //全レコード件数データをHTMLに埋め込み、ajax通信ではHTMLから全レコード件数データを取得
-    $this->view->assign('thread_count', $thread_count);
+    $this->view->assign('Sdx_pager', $Sdx_pager);
+    
   }
       
 }

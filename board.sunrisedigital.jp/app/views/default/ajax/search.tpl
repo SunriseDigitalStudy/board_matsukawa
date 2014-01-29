@@ -1,4 +1,4 @@
-<div id="totalPage" data-total-page="{$thread_count}"></div>
+<div id="page" data-next-page="{$Sdx_pager->getNextPageId()}" data-prev-page="{$Sdx_pager->getPrevPageId()}"></div>
   <div class="col-sm-8">
       <div class="panel panel-default">
         <div class="panel-heading">
