@@ -32,9 +32,8 @@
   <script>
     $(function() {
 
-      var page = 1; //表示するページのナンバー　     
-      
-      ajax(page);
+      var firstPage = 1; //表示するページのナンバー
+      ajax(firstPage);
 
       /*
        *検索ボタンクリックアクション
@@ -42,9 +41,8 @@
       $('#form1').submit(function(event) {
         //submitイベントを無効化
         event.preventDefault();
-        //送る値ををクエリ文字列に変換
-        page = 1;
-        ajax(page);
+        //変数firstPageはレキシカル変数
+        ajax(firstPage);
       });
 
 
@@ -60,38 +58,41 @@
           data: formVal,
           success: function(data)
           {
-            //検索結果を出力している箇所のみを読み込んで出力する
             $("#content").html(data);
             //出力したHTMLにクリックイベントを実装
-            click();
+            initPagingEvent();
           },
           error: function(XMLHttpRequest, textStatus, errorThrown)
           {
             alert('Error : ' + errorThrown);
           }
         });
+        
       }
 
-      function click() {
-        var number = Number($("#offset").text()); //HTML要素から、総データ件数を取得,数字に変換
-        var count = Math.ceil(number / 5); //総データ件数から総ページ数を割り出す
+      function initPagingEvent() {
+        
+        var nextPage = Number($("#page").data('next-page'));
+        var prevPage = Number($("#page").data('prev-page'));
+        
         //次の件数を表示
-        if (page >= count) {
+        if (nextPage){
+          $('#next').click(function() {
+          ajax(nextPage);
+        });
+        }else{
           $('#next').hide();
         }
-        $('#next').click(function() {
-          page++
-          ajax(page);
-        });
 
         //前の件数を表示
-        if (page <= 1) {
+        if (prevPage) {
+          $('#back').click(function() {
+          ajax(prevPage);
+        });
+        }else{
           $('#back').hide();
         }
-        $('#back').click(function() {
-          page--;
-          ajax(page);
-        });
+        
       }
 
       /*
