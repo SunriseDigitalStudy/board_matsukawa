@@ -50,7 +50,7 @@
         //送る値ををクエリ文字列に変換
         var $form = $("#form1");
         var formVal = $form.serialize();
-        formVal += '&page=' + page;
+        formVal += '&pid=' + page;
 
         $.ajax({
           type: "GET",

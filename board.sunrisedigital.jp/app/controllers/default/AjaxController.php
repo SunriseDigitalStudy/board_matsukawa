@@ -13,6 +13,9 @@
  */
 class AjaxController extends Sdx_Controller_Action_Http{
   
+  //ページング処理に使う値
+  const PER_PAGE = 5; //1ページあたりの表示件数
+  
   public function indexAction() {
     $this->_disableViewRenderer();
   }
@@ -76,10 +79,6 @@ class AjaxController extends Sdx_Controller_Action_Http{
     //絞り込み条件の値(パラメータ)を取得
     $genre_id = $this->_getParam('genre_id');
     $tag_ids = $this->_getParam('tag_ids');
-        
-    //ページング処理に使う値
-    define('LIMIT_NUMBER', '5'); //1ページあたりの表示件数
-    $page = $this->_getParam('page'); //ページナンバー
 
     //並び順用サブクエリの作成
     //SELECT thread_id, Max(updated_at) AS updated  FROM entry GROUP BY thread_id
@@ -105,8 +104,7 @@ class AjaxController extends Sdx_Controller_Action_Http{
     $sub_Query = $select_th->expr('(' . $select_en->assemble() . ')');
     $select_th
             ->joinLeft(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id')
-            ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC')
-            ->limitpage($page, LIMIT_NUMBER);
+            ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC');
     //タグ条件で絞込み
     if ($tag_ids) {
       $select_th
@@ -119,15 +117,17 @@ class AjaxController extends Sdx_Controller_Action_Http{
       $select_th
               ->add('genre_id', $genre_id);
     }
+    
+    //ページング処理
+    $count = $select_th->countRow(); //総レコード数
+    $sdx_pager = new Sdx_Pager(self::PER_PAGE, $count);
+    $select_th->limitPager($sdx_pager);
 
     //sql発行
     $thread_list = $t_thread->fetchAll($select_th);
-    $thread_count = $t_thread->count($select_th); //総レコード件数の取得
-    //Sdx_Pagerはページング情報
-    $Sdx_pager = new Sdx_Pager(LIMIT_NUMBER, $thread_count,'page');
     //テンプレにアサイン
     $this->view->assign('thread_list', $thread_list);
-    $this->view->assign('Sdx_pager', $Sdx_pager);
+    $this->view->assign('sdx_pager', $sdx_pager);
     
   }
       
