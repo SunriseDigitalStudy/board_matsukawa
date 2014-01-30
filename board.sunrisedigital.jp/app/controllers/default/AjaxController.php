@@ -54,39 +54,6 @@ class AjaxController extends Sdx_Controller_Action_Http{
   
   public function searchAction() {
 
-    /*
-     * Sdx_Formで入力フォームを作成
-     */
-
-    $form = new Sdx_Form();
-    $form
-            ->setAction("javascript:void(0);") //Action先を現在のURLに指定
-            ->setMethodToPost()  //メソッドをPOSTに変更
-            ->setId('form1');
-            
-    //各フォームにエレメントをセット
-    //ジャンル選択ラジオボタン
-    $elems = new Sdx_Form_Element_Group_Radio();
-    $genre_list = Bd_Orm_Main_Genre::createTable()
-            ->getSelect()
-            ->setColumns(array('id', 'name'))
-            ->fetchPairs();
-    $elems->setName('genre_id')->addChildren($genre_list);
-    $form->setElement($elems);
-
-    //タグ選択チェックボックス
-    $elems = new Sdx_Form_Element_Group_Checkbox();
-    $tag_list = Bd_Orm_Main_Tag::createTable()
-            ->getselect()
-            ->setColumns(array('id', 'name'))
-            ->fetchPairs();
-    $elems->setName('tag_ids')->addChildren($tag_list);
-    $form->setElement($elems);
-
-    $this->view->assign('form', $form);
-
-
-
     /* -------------------------------------------------------------------------------
      *  複合条件検索のSQL文
       SELECT *
