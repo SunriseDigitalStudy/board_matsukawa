@@ -131,7 +131,7 @@ class JsonController extends Sdx_Controller_Action_Http {
 
     //json出力
     $thread_list_array = $thread_list->toArray(); //データを配列に変換
-    header("Content_Type: text/json; charset=utf-8");  //利用するデータタイプを送出
+    header("Content_Type: text/json; charset=utf-8");  //出力するファイル形式を指定
     $thread_list_array = json_encode($thread_list_array, true); //配列データをエンコードする
     echo $thread_list_array;
   }

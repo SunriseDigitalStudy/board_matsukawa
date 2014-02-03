@@ -60,9 +60,13 @@
           dataType: "json",
           success: function(json)
           {
+            //他にも変数への空文字の代入方法は、「var data =　"";」や「var data = String();」などがある
+            var data = new String(); //文字列を格納する変数を宣言
             for (var i = 0; i < json.length; i++) {
-              $("#content").append(json[i].title + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + ((json[i].updated) ? json[i].updated : 'コメントはありません') + '<br>');
+              data += json[i].title + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + ((json[i].updated) ? json[i].updated : 'コメントはありません') + '<br>';
             }
+
+            $("#content").html(data);
             //出力したHTMLにクリックイベントを実装
             initPagingEvent();
           },
