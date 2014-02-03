@@ -1,3 +1,4 @@
+{*default/json/list.tpl*}
 
 {extends file='default/base.tpl'}
 {block title append} Ajaxリスト{/block}
@@ -54,11 +55,14 @@
 
         $.ajax({
           type: "GET",
-          url: "/ajax/search",
+          url: "/json/search",
           data: formVal,
-          success: function(data)
+          dataType: "json",
+          success: function(json)
           {
-            $("#content").html(data);
+            for (var i = 0; i < json.length; i++) {
+              $("#content").append(json[i].title + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + ((json[i].updated) ? json[i].updated : 'コメントはありません') + '<br>');
+            }
             //出力したHTMLにクリックイベントを実装
             initPagingEvent();
           },
@@ -67,32 +71,32 @@
             alert('Error : ' + errorThrown);
           }
         });
-        
+
       }
 
       function initPagingEvent() {
-        
+
         var nextPage = Number($("#page").data('next-page'));
         var prevPage = Number($("#page").data('prev-page'));
-        
+
         //次の件数を表示
-        if (nextPage){
+        if (nextPage) {
           $('#next').click(function() {
-          ajax(nextPage);
-        });
-        }else{
+            ajax(nextPage);
+          });
+        } else {
           $('#next').hide();
         }
 
         //前の件数を表示
         if (prevPage) {
           $('#back').click(function() {
-          ajax(prevPage);
-        });
-        }else{
+            ajax(prevPage);
+          });
+        } else {
           $('#back').hide();
         }
-        
+
       }
 
       /*
