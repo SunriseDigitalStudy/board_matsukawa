@@ -30,12 +30,11 @@
           <h3>検索結果(スレッド一覧)</h3>
         </div>
         <div class="panel-body">
-          <ul class="pager">
-            <li class="previous"><a id="back">&larr; 前の5件</a></li>
-            <li class="next"><a id="next">次の5件 &rarr;</a></li>
+          <ul class="pager" id="pager">
+            {*ajaxでページングボタンを生成*}
           </ul>
           <ul id="content">
-            {*ajaxでデータを挿入*}
+            {*ajaxでスレッドリストデータを生成*}
           </ul>
         </div>
       </div>
@@ -99,7 +98,11 @@
               $("#content").html(tpl_html);
             }
             
-            //出力したHTMLにクリックイベントを実装
+            //ページングボタンを表示
+            var paging = $("#paging_button").text();
+            $("#pager").html(paging);
+            
+            //ページングボタンにクリックイベントを実装
             var page = json['page'];
             initPagingEvent(page);
             
@@ -116,8 +119,7 @@
         
         //次の件数を表示
         if (page['nextPage']) {
-          $('#next').show();
-          $('#next').unbind('click').click(function() { //unbind()でイベントを初期化
+          $('#next').click(function() { 
             ajax(page['nextPage']);
           });
         } else {
@@ -126,8 +128,7 @@
         
         //前の件数を表示
         if (page['prevPage']) {
-          $('#back').show();
-          $('#back').unbind('click').click(function() {
+          $('#back').click(function() {
             ajax(page['prevPage']);
           });
         } else {
@@ -161,5 +162,11 @@
     <p style="font-size:200%">検索条件に一致するスレッドはありません</p><br/>
     <p><img src="/img/20081221231807.jpg" alt="やる夫3"></p>
   </script>
+  
+  <script type="text/html" id="paging_button">
+    <li class="previous"><a id="back">&larr; 前の5件</a></li>
+    <li class="next"><a id="next">次の5件 &rarr;</a></li>
+  </script>
+  
 
 {/block}
