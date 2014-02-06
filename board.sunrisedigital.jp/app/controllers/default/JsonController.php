@@ -105,6 +105,7 @@ class JsonController extends Sdx_Controller_Action_Http {
     $sub_Query = $select_th->expr('(' . $select_en->assemble() . ')');
     $select_th
             ->joinLeft(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id')
+            ->setColumns(array('thread.id','title','max_updated.updated'))
             ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC');
     //タグ条件で絞込み
     if ($tag_ids) {
@@ -119,21 +120,33 @@ class JsonController extends Sdx_Controller_Action_Http {
               ->add('genre_id', $genre_id);
     }
 
-    //ページング処理
+    
+    /*
+     * ページング処理
+     */
     $count = $select_th->countRow(); //総レコード数
-    $sdx_pager = new Sdx_Pager(self::PER_PAGE, $count);
+    //コンストラクタ内でURLのクエリ文字列から直に、表示するページナンバーを取得している
+    $sdx_pager = new Sdx_Pager(self::PER_PAGE, $count); 
     $select_th->limitPager($sdx_pager);
-
 
     //sql発行
     $thread_list = $t_thread->fetchAll($select_th);
     
+    /*
+     * json出力
+     */
+    $json_data = array(
+                  'thread_list' => $thread_list->toArray(), //データを配列に変換
+                  'page' => array(  //ページングデータ
+                              'nextPage' => $sdx_pager->getNextPageId(), 
+                              'prevPage' => $sdx_pager->getPrevPageId())
+    );
+    
+    
+    $json_data = json_encode($json_data);
+    header("Content_Type: application/json; charset=utf-8");
+    echo $json_data;
 
-    //json出力
-    $thread_list_array = $thread_list->toArray(); //データを配列に変換
-    header("Content_Type: text/json; charset=utf-8");  //出力するファイル形式を指定
-    $thread_list_array = json_encode($thread_list_array, true); //配列データをエンコードする
-    echo $thread_list_array;
   }
 
 }
