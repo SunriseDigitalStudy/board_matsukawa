@@ -142,11 +142,7 @@ class JsonController extends Sdx_Controller_Action_Http {
                               'prevPage' => $sdx_pager->getPrevPageId())
     );
     
-    
-    $json_data = json_encode($json_data);
-    header("Content_Type: application/json; charset=utf-8");
-    echo $json_data;
-
+    $this->jsonResponse($json_data);
   }
 
 }

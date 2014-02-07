@@ -66,23 +66,20 @@
       function ajax(page) {
         //送る値ををクエリ文字列に変換
         var $form = $("#form1");
-        var formVal = $form.serialize();
-        formVal += '&pid=' + page;
+        var form_val = $form.serialize();
+        form_val += '&pid=' + page;
         
         $.ajax({
           type: "GET",
           url: "/json/search",
-          data: formVal,
-          dataType: "json",
-          success: function(json)
-          {
-            var thread_list = json['thread_list'];
-            
-            //取得したjsonデータをHTMLにレンダリングして出力
-            if (thread_list.length >= 1) {
+          data: form_val,
+          dataType: "json"
+        }).done(function(json){
+          //取得したjsonデータをHTMLにレンダリングして出力
+            if (json['thread_list'].length >= 1) {
               var tpl_html = $("#search_criteria_ture").text();
               var html = "";
-              $.each(thread_list, function() {
+              $.each(json['thread_list'], function() {
                 var tpl_html_copy = tpl_html;  //tpl_html_copyを毎回初期化。tpl_htmlの値はいじりたくない
                 $.each(this, function(key, value) {
                   if (!value) {
@@ -106,11 +103,8 @@
             var page = json['page'];
             initPagingEvent(page);
             
-          },
-          error: function(XMLHttpRequest, textStatus, errorThrown)
-          {
-            alert('Error : ' + errorThrown);
-          }
+        }).fail(function(XMLHttpRequest, textStatus, errorThrown){
+          alert('Error : ' + errorThrown);
         });
         
       }
