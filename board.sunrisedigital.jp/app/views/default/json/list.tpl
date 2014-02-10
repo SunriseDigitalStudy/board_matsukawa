@@ -22,8 +22,6 @@
         </div>
       </div>
     </div>
-          
-                                                                  <div id="pager"></div>
 
     <div class="col-sm-8">
       <div class="panel panel-default">
@@ -50,10 +48,12 @@
 {block js}
   <script>
     $(function() {
-      
+      //前の5件を表示するボタンは、1ページ目では使う必要がないので、はじめに非表示にする。
+      $('#back').hide();
+
       var firstPage = 1; //表示するページのナンバー
       ajax(firstPage);
-      
+
       /*
        *検索ボタンクリックアクション
        */
@@ -63,89 +63,87 @@
         //変数firstPageはレキシカル変数
         ajax(firstPage);
       });
-      
-      
+
+
       function ajax(page) {
         //送る値ををクエリ文字列に変換
         var $form = $("#form1");
         var form_val = $form.serialize();
         form_val += '&pid=' + page;
-        
+
         $.ajax({
           type: "GET",
           url: "/json/search",
           data: form_val,
           dataType: "json"
-        }).done(function(json){
           
-          //ページングデータをdata Attributes(独自データ属性)にする
+        }).done(function(json) {
+
+          //ページングデータをdata Attributes(独自データ属性)に格納する
           var pager = json['page'];
-          $("#pager").data("next-page", pager['next_page']);
-          $("#pager").data("prev-page", pager['prev_page']);
-          
-          
+
+          if (pager['next_page']) {
+            $('#next').show();
+            $("#pager").data("next-page", pager['next_page']);
+          } else {
+            $('#next').hide();
+          }
+
+          if (pager['prev_page']) {
+            $('#back').show();
+            $("#pager").data("prev-page", pager['prev_page']);
+          } else {
+            $('#back').hide();
+          }
+
           //取得したjsonデータをHTMLにレンダリングして出力
-            if (json['thread_list'].length >= 1) {
-              var tpl_html = $("#search_criteria_ture").text();
-              var html = "";
-              $.each(json['thread_list'], function() {
-                var tpl_html_copy = tpl_html;  //tpl_html_copyを毎回初期化。tpl_htmlの値はいじりたくない
-                $.each(this, function(key, value) {
-                  if (!value) {
-                    value = 'コメントはありません';
-                  }
-                  tpl_html_copy = tpl_html_copy.split("%" + key + "%").join(value);
-                });
-                html += tpl_html_copy;
+          if (json['thread_list'].length >= 1) {
+            var tpl_html = $("#search_criteria_ture").text();
+            var html = "";
+            $.each(json['thread_list'], function() {
+              var tpl_html_copy = tpl_html;  //tpl_html_copyを毎回初期化。tpl_htmlの値はいじりたくない
+              $.each(this, function(key, value) {
+                if (!value) {
+                  value = 'コメントはありません';
+                }
+                tpl_html_copy = tpl_html_copy.split("%" + key + "%").join(value);
               });
-              $("#content").html(html);
-            }else{
-              var tpl_html = $("#search_criteria_false").text();
-              $("#content").html(tpl_html);
-            }
-            //ページングボタンにクリックイベントを実装
-{*            var page = json['page'];
-            initPagingEvent(page);*}
-            
-        }).fail(function(XMLHttpRequest, textStatus, errorThrown){
+              html += tpl_html_copy;
+            });
+            $("#content").html(html);
+          } else {
+            var tpl_html = $("#search_criteria_false").text();
+            $("#content").html(tpl_html);
+          }
+
+        }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
           alert('Error : ' + errorThrown);
         });
-        
-      }
-      
-{*      function initPagingEvent(page) {*}
-        
-        //次の件数を表示
-{*        if (nextPage) {*}
-          $('#next').click(function() {
-            var nextPage = Number($("#pager").data("next-page"));
-            ajax(nextPage);
-          });
-{*        } else {
-          $('#next').hide();
-        }*}
-        
-        //前の件数を表示
-{*        if (prevPage) {*}
-          $('#back').click(function() {
-            var prevPage = Number($("#pager").data("prev-page"));
-            ajax(prevPage);
-          });
-{*        } else {
-          $('#back').hide();
-        }*}
 
-{*      }*}
-      
+      }
+
+      //次の件数を表示
+      $('#next').click(function() {
+        var nextPage = Number($("#pager").data("next-page"));
+        ajax(nextPage);
+      });
+
+      //前の件数を表示
+      $('#back').click(function() {
+        var prevPage = Number($("#pager").data("prev-page"));
+        ajax(prevPage);
+      });
+
+
       /*
        * 選択されたラジオボタン、チェックボックスのチェックをリセットする処理
        */
       $(".clearForm").bind("click", function() {
         $(this.form).find(":checked").prop("checked", false);
       });
-      
+
     });
-    
+
   </script>
 
 
@@ -163,6 +161,6 @@
     <p><img src="/img/20081221231807.jpg" alt="やる夫3"></p>
   </script>
 
-  
+
 
 {/block}
