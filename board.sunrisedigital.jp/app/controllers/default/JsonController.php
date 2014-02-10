@@ -11,16 +11,16 @@
  *
  * @author Matsukawa
  */
-class AjaxController extends Sdx_Controller_Action_Http{
-  
+class JsonController extends Sdx_Controller_Action_Http {
+
   //ページング処理に使う値
   const PER_PAGE = 5; //1ページあたりの表示件数
-  
+
   public function indexAction() {
     $this->_disableViewRenderer();
   }
 
- public function listAction() {
+  public function listAction() {
 
     /*
      * Sdx_Formで入力フォームを作成
@@ -31,7 +31,7 @@ class AjaxController extends Sdx_Controller_Action_Http{
             ->setAction("javascript:void(0);") //Action先を現在のURLに指定
             ->setMethodToPost()  //メソッドをPOSTに変更
             ->setId('form1');
-            
+
     //各フォームにエレメントをセット
     //ジャンル選択ラジオボタン
     $elems = new Sdx_Form_Element_Group_Radio();
@@ -50,12 +50,13 @@ class AjaxController extends Sdx_Controller_Action_Http{
             ->fetchPairs();
     $elems->setName('tag_ids')->addChildren($tag_list);
     $form->setElement($elems);
-   
+
     $this->view->assign('form', $form);
-    
   }
-  
+
   public function searchAction() {
+
+    $this->_disableViewRenderer();
 
     /* -------------------------------------------------------------------------------
      *  複合条件検索のSQL文
@@ -104,6 +105,7 @@ class AjaxController extends Sdx_Controller_Action_Http{
     $sub_Query = $select_th->expr('(' . $select_en->assemble() . ')');
     $select_th
             ->joinLeft(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id')
+            ->setColumns(array('thread.id','title','max_updated.updated'))
             ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC');
     //タグ条件で絞込み
     if ($tag_ids) {
@@ -117,18 +119,34 @@ class AjaxController extends Sdx_Controller_Action_Http{
       $select_th
               ->add('genre_id', $genre_id);
     }
+
     
-    //ページング処理
+    /*
+     * ページング処理
+     */
     $count = $select_th->countRow(); //総レコード数
-    $sdx_pager = new Sdx_Pager(self::PER_PAGE, $count);
+    //コンストラクタ内でURLのクエリ文字列から直に、表示するページナンバーを取得している
+    $sdx_pager = new Sdx_Pager(self::PER_PAGE, $count); 
     $select_th->limitPager($sdx_pager);
 
     //sql発行
     $thread_list = $t_thread->fetchAll($select_th);
-    //テンプレにアサイン
-    $this->view->assign('thread_list', $thread_list);
-    $this->view->assign('sdx_pager', $sdx_pager);
     
+    /*
+     * json出力
+     */
+    $json_data = array(
+                  'thread_list' => $thread_list->toArray(), //データを配列に変換
+                  'page' => array(  //ページングデータ
+                              'nextPage' => $sdx_pager->getNextPageId(), 
+                              'prevPage' => $sdx_pager->getPrevPageId())
+    );
+    
+    
+    $json_data = json_encode($json_data);
+    header("Content_Type: application/json; charset=utf-8");
+    echo $json_data;
+
   }
-      
+
 }
