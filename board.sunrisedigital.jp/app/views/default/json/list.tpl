@@ -1,7 +1,7 @@
 {*default/json/list.tpl*}
 
 {extends file='default/base.tpl'}
-{block title append} Ajaxリスト{/block}
+{block title append} Jsonリスト{/block}
 {block main_contents}
   <div class="row">
 
@@ -22,7 +22,8 @@
         </div>
       </div>
     </div>
-
+          
+                                                                  <div id="pager"></div>
 
     <div class="col-sm-8">
       <div class="panel panel-default">
@@ -31,7 +32,8 @@
         </div>
         <div class="panel-body">
           <ul class="pager" id="pager">
-            {*ajaxでページングボタンを生成*}
+            <li class="previous"><a id="back">&larr; 前の5件</a></li>
+            <li class="next"><a id="next">次の5件 &rarr;</a></li>
           </ul>
           <ul id="content">
             {*ajaxでスレッドリストデータを生成*}
@@ -75,6 +77,13 @@
           data: form_val,
           dataType: "json"
         }).done(function(json){
+          
+          //ページングデータをdata Attributes(独自データ属性)にする
+          var pager = json['page'];
+          $("#pager").data("next-page", pager['next_page']);
+          $("#pager").data("prev-page", pager['prev_page']);
+          
+          
           //取得したjsonデータをHTMLにレンダリングして出力
             if (json['thread_list'].length >= 1) {
               var tpl_html = $("#search_criteria_ture").text();
@@ -94,14 +103,9 @@
               var tpl_html = $("#search_criteria_false").text();
               $("#content").html(tpl_html);
             }
-            
-            //ページングボタンを表示
-            var paging = $("#paging_button").text();
-            $("#pager").html(paging);
-            
             //ページングボタンにクリックイベントを実装
-            var page = json['page'];
-            initPagingEvent(page);
+{*            var page = json['page'];
+            initPagingEvent(page);*}
             
         }).fail(function(XMLHttpRequest, textStatus, errorThrown){
           alert('Error : ' + errorThrown);
@@ -109,27 +113,29 @@
         
       }
       
-      function initPagingEvent(page) {
+{*      function initPagingEvent(page) {*}
         
         //次の件数を表示
-        if (page['nextPage']) {
-          $('#next').click(function() { 
-            ajax(page['nextPage']);
+{*        if (nextPage) {*}
+          $('#next').click(function() {
+            var nextPage = Number($("#pager").data("next-page"));
+            ajax(nextPage);
           });
-        } else {
+{*        } else {
           $('#next').hide();
-        }
+        }*}
         
         //前の件数を表示
-        if (page['prevPage']) {
+{*        if (prevPage) {*}
           $('#back').click(function() {
-            ajax(page['prevPage']);
+            var prevPage = Number($("#pager").data("prev-page"));
+            ajax(prevPage);
           });
-        } else {
+{*        } else {
           $('#back').hide();
-        }
+        }*}
 
-      }
+{*      }*}
       
       /*
        * 選択されたラジオボタン、チェックボックスのチェックをリセットする処理
@@ -156,11 +162,7 @@
     <p style="font-size:200%">検索条件に一致するスレッドはありません</p><br/>
     <p><img src="/img/20081221231807.jpg" alt="やる夫3"></p>
   </script>
-  
-  <script type="text/html" id="paging_button">
-    <li class="previous"><a id="back">&larr; 前の5件</a></li>
-    <li class="next"><a id="next">次の5件 &rarr;</a></li>
-  </script>
+
   
 
 {/block}
