@@ -19,6 +19,10 @@
           <button type="submit" class="btn btn-success"><b>検索</b><i class="glyphicon glyphicon-hand-left"></i></button>
           <input class="btn btn-danger clearForm" type="button" value="リセット">
           </form>
+          <br/>
+          <br/>
+          <input type="text" class="form-control" id="vague" name="word"><br/>
+          <input type="button" class="btn btn-primary search" value="コメント内容検索">
         </div>
       </div>
     </div>
@@ -33,6 +37,7 @@
             <li class="previous"><a id="back">&larr; 前の5件</a></li>
             <li class="next"><a id="next">次の5件 &rarr;</a></li>
           </ul>
+          <p id="headline"></p>
           <ul id="content">
             {*ajaxでスレッドリストデータを生成*}
           </ul>
@@ -48,6 +53,7 @@
 {block js}
   <script>
     $(function() {
+
       //前の5件を表示するボタンは、1ページ目では使う必要がないので、はじめに非表示にする。
       $('#back').hide();
 
@@ -60,6 +66,7 @@
       $('#form1').submit(function(event) {
         //submitイベントを無効化
         event.preventDefault();
+        $("#headline").hide();
         //変数firstPageはレキシカル変数
         ajax(firstPage);
       });
@@ -76,7 +83,7 @@
           url: "/json/search",
           data: form_val,
           dataType: "json"
-          
+
         }).done(function(json) {
 
           //ページングデータをdata Attributes(独自データ属性)に格納する
@@ -108,7 +115,7 @@
                 }
                 tpl_html_copy = tpl_html_copy.split("%" + key + "%").join(value);
               });
-              html += tpl_html_copy;
+              html += tpl_html_copy; //まとめて出力するために、テンプレートを連結。
             });
             $("#content").html(html);
           } else {
@@ -142,12 +149,47 @@
         $(this.form).find(":checked").prop("checked", false);
       });
 
+
+      $('.search').on('click', function() {
+        
+        $('#next').hide();
+        $('#back').hide();
+        
+        //入力フォームの値を取得
+        var word = $("#vague").val();
+
+        $.ajax({
+          type: 'GET',
+          url: '/json/wordsearch',
+          data: 'word=' + word,
+          dataType: 'json'
+        }).done(function(json) {
+          //表題を出力
+          $("#headline").show(); //ラジオボタン、チェックボックスでの検索時に非表示にしたものを表示する。
+          var headline_tpl = $("#headline_tpl").text().split('keyword').join(word);
+          $("#headline").html(headline_tpl);
+          //スレッドタイトルとコメントカウント数を出力
+          var tpl_html = $("#words").text();
+          var html = "";
+          $.each(json, function() {
+            var tpl_html_copy = tpl_html;  //tpl_html_copyを毎回初期化。tpl_htmlの値はいじりたくない
+            $.each(this, function(key, value) {
+              tpl_html_copy = tpl_html_copy.split("%" + key + "%").join(value);
+            });
+            html += tpl_html_copy;
+          });
+          $("#content").html(html);
+        }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+          alert('Error : ' + errorThrown);
+        });
+      });
+
     });
 
   </script>
 
 
-
+{*HTMLテンプレート*}
   <script type="text/html" id="search_criteria_ture">
     <li>
       <span style="font-size:130%" class="entry_list"><a href="/entry3/%id%/list">%title%</a></span>
@@ -161,6 +203,16 @@
     <p><img src="/img/20081221231807.jpg" alt="やる夫3"></p>
   </script>
 
-
-
+  <script type="text/html" id="headline_tpl">
+    <p style="font-size:150%"><b>キーワード「<font color="#ff0000">keyword</font>」を含んだコメントのあるスレッド一覧</b></p>
+  </script>
+  
+  <script type="text/html" id="words">
+    <li>
+      <span style="font-size:130%" class="entry_list"><a href="/entry3/%id%/list">%title%</a></span>
+      &nbsp;
+      <span>キーワードが含まれているコメント数-----「%count(entry.body)%」</span>
+    </li>
+  </script>
+  
 {/block}

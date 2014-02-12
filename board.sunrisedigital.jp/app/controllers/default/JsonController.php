@@ -144,5 +144,38 @@ class JsonController extends Sdx_Controller_Action_Http {
     
     $this->jsonResponse($json_data);
   }
+  
+  public function wordsearchAction(){
+    
+    $this->_disableViewRenderer();
+    
+    /*
+     * 「SQL文」
+     * SELECT thread.id, thread.title, count(entry.body)
+     * FROM thread INNER JOIN entry ON thread.id = entry.thread_id
+     * WHERE entry.body LIKE "%任意の単語%"
+     * GROUP BY thread.id
+     * ORDER BY count(entry.body) DESC;
+     */
+    
+    $word = $this->_getParam('word');
+    $keyword = trim($word); //単語の前後にスペースがあったら削除
+    
+    $t_thread = Bd_Orm_Main_Thread::createTable();
+    $t_entry = Bd_Orm_Main_Entry::createTable();
+    
+    $t_thread->addJoinInner($t_entry);
+    
+    $select = $t_thread->getSelectWithJoin();
+    $select->setColumns(array('thread.id','thread.title','count(entry.body)' ))
+            ->like('entry.body','%'.$keyword.'%')
+            ->group('thread.id')
+            ->order('count(entry.body) DESC');
+    $thread_list = $t_thread->fetchAll($select);
+
+    $json_data = $thread_list->toArray();
+    $this->jsonResponse($json_data);
+
+  }
 
 }
