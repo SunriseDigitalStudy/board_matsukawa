@@ -1,7 +1,7 @@
 {*default/json/list.tpl*}
 
 {extends file='default/base.tpl'}
-{block title append} Ajaxリスト{/block}
+{block title append} Jsonリスト{/block}
 {block main_contents}
   <div class="row">
 
@@ -23,7 +23,6 @@
       </div>
     </div>
 
-
     <div class="col-sm-8">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -31,7 +30,8 @@
         </div>
         <div class="panel-body">
           <ul class="pager" id="pager">
-            {*ajaxでページングボタンを生成*}
+            <li class="previous"><a id="back">&larr; 前の5件</a></li>
+            <li class="next"><a id="next">次の5件 &rarr;</a></li>
           </ul>
           <ul id="content">
             {*ajaxでスレッドリストデータを生成*}
@@ -48,10 +48,12 @@
 {block js}
   <script>
     $(function() {
-      
+      //前の5件を表示するボタンは、1ページ目では使う必要がないので、はじめに非表示にする。
+      $('#back').hide();
+
       var firstPage = 1; //表示するページのナンバー
       ajax(firstPage);
-      
+
       /*
        *検索ボタンクリックアクション
        */
@@ -61,91 +63,87 @@
         //変数firstPageはレキシカル変数
         ajax(firstPage);
       });
-      
-      
+
+
       function ajax(page) {
         //送る値ををクエリ文字列に変換
         var $form = $("#form1");
-        var formVal = $form.serialize();
-        formVal += '&pid=' + page;
-        
+        var form_val = $form.serialize();
+        form_val += '&pid=' + page;
+
         $.ajax({
           type: "GET",
           url: "/json/search",
-          data: formVal,
-          dataType: "json",
-          success: function(json)
-          {
-            var thread_list = json['thread_list'];
-            
-            //取得したjsonデータをHTMLにレンダリングして出力
-            if (thread_list.length >= 1) {
-              var tpl_html = $("#search_criteria_ture").text();
-              var html = "";
-              $.each(thread_list, function() {
-                var tpl_html_copy = tpl_html;  //tpl_html_copyを毎回初期化。tpl_htmlの値はいじりたくない
-                $.each(this, function(key, value) {
-                  if (!value) {
-                    value = 'コメントはありません';
-                  }
-                  tpl_html_copy = tpl_html_copy.split("%" + key + "%").join(value);
-                });
-                html += tpl_html_copy;
-              });
-              $("#content").html(html);
-            }else{
-              var tpl_html = $("#search_criteria_false").text();
-              $("#content").html(tpl_html);
-            }
-            
-            //ページングボタンを表示
-            var paging = $("#paging_button").text();
-            $("#pager").html(paging);
-            
-            //ページングボタンにクリックイベントを実装
-            var page = json['page'];
-            initPagingEvent(page);
-            
-          },
-          error: function(XMLHttpRequest, textStatus, errorThrown)
-          {
-            alert('Error : ' + errorThrown);
+          data: form_val,
+          dataType: "json"
+          
+        }).done(function(json) {
+
+          //ページングデータをdata Attributes(独自データ属性)に格納する
+          var pager = json['page'];
+
+          if (pager['next_page']) {
+            $('#next').show();
+            $("#pager").data("next-page", pager['next_page']);
+          } else {
+            $('#next').hide();
           }
+
+          if (pager['prev_page']) {
+            $('#back').show();
+            $("#pager").data("prev-page", pager['prev_page']);
+          } else {
+            $('#back').hide();
+          }
+
+          //取得したjsonデータをHTMLにレンダリングして出力
+          if (json['thread_list'].length >= 1) {
+            var tpl_html = $("#search_criteria_ture").text();
+            var html = "";
+            $.each(json['thread_list'], function() {
+              var tpl_html_copy = tpl_html;  //tpl_html_copyを毎回初期化。tpl_htmlの値はいじりたくない
+              $.each(this, function(key, value) {
+                if (!value) {
+                  value = 'コメントはありません';
+                }
+                tpl_html_copy = tpl_html_copy.split("%" + key + "%").join(value);
+              });
+              html += tpl_html_copy;
+            });
+            $("#content").html(html);
+          } else {
+            var tpl_html = $("#search_criteria_false").text();
+            $("#content").html(tpl_html);
+          }
+
+        }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+          alert('Error : ' + errorThrown);
         });
-        
-      }
-      
-      function initPagingEvent(page) {
-        
-        //次の件数を表示
-        if (page['nextPage']) {
-          $('#next').click(function() { 
-            ajax(page['nextPage']);
-          });
-        } else {
-          $('#next').hide();
-        }
-        
-        //前の件数を表示
-        if (page['prevPage']) {
-          $('#back').click(function() {
-            ajax(page['prevPage']);
-          });
-        } else {
-          $('#back').hide();
-        }
 
       }
-      
+
+      //次の件数を表示
+      $('#next').click(function() {
+        var nextPage = Number($("#pager").data("next-page"));
+        ajax(nextPage);
+      });
+
+      //前の件数を表示
+      $('#back').click(function() {
+        var prevPage = Number($("#pager").data("prev-page"));
+        ajax(prevPage);
+      });
+
+
       /*
        * 選択されたラジオボタン、チェックボックスのチェックをリセットする処理
        */
       $(".clearForm").bind("click", function() {
         $(this.form).find(":checked").prop("checked", false);
       });
-      
+
     });
-    
+
   </script>
 
 
@@ -162,11 +160,7 @@
     <p style="font-size:200%">検索条件に一致するスレッドはありません</p><br/>
     <p><img src="/img/20081221231807.jpg" alt="やる夫3"></p>
   </script>
-  
-  <script type="text/html" id="paging_button">
-    <li class="previous"><a id="back">&larr; 前の5件</a></li>
-    <li class="next"><a id="next">次の5件 &rarr;</a></li>
-  </script>
-  
+
+
 
 {/block}

@@ -138,15 +138,11 @@ class JsonController extends Sdx_Controller_Action_Http {
     $json_data = array(
                   'thread_list' => $thread_list->toArray(), //データを配列に変換
                   'page' => array(  //ページングデータ
-                              'nextPage' => $sdx_pager->getNextPageId(), 
-                              'prevPage' => $sdx_pager->getPrevPageId())
+                              'next_page' => $sdx_pager->getNextPageId(), 
+                              'prev_page' => $sdx_pager->getPrevPageId())
     );
     
-    
-    $json_data = json_encode($json_data);
-    header("Content_Type: application/json; charset=utf-8");
-    echo $json_data;
-
+    $this->jsonResponse($json_data);
   }
 
 }
