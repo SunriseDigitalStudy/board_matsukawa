@@ -21,8 +21,17 @@
           </form>
           <br/>
           <br/>
-          <input type="text" class="form-control" id="vague" name="word"><br/>
+          <form id="vague">
+          <input type="text" class="form-control" id="vague1" name="word1"><br/>
+          <label class="radio-inline">
+            <input type="radio" name="and_or" value="and" checked> AND
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="and_or" value="or"> OR
+          </label>
+          <input type="text" class="form-control" id="vague2" name="word2"><br/>
           <input type="button" class="btn btn-primary search" value="コメント内容検索">
+          </form>
         </div>
       </div>
     </div>
@@ -151,18 +160,30 @@
 
 
       $('.search').on('click', function() {
-        
+
         $('#next').hide();
         $('#back').hide();
-        
+
         //入力フォームの値を取得
-        var word = $("#vague").val();
+        var form = $("#vague");
+        var query = form.serialize();
+        var word1 = $("#vague1").val();
+        var word2 = $("#vague2").val();
+        
+        //headlineに表示する単語(word)
+        var word = " ";
+        var and_or = $("input:radio[name='and_or']:checked").val();
+        if(and_or == 'and'){
+          word = word1 + '<font color="#000000">と</font>' + word2;
+        }else{
+          word = word1 + '<font color="#000000">または</font>' + word2;
+        }
 
         $.ajax({
           type: 'GET',
           url: '/json/wordsearch',
-          data: 'word=' + word,
-          dataType: 'json'
+          data: query,
+
         }).done(function(json) {
           //表題を出力
           $("#headline").show(); //ラジオボタン、チェックボックスでの検索時に非表示にしたものを表示する。
@@ -189,7 +210,7 @@
   </script>
 
 
-{*HTMLテンプレート*}
+  {*HTMLテンプレート*}
   <script type="text/html" id="search_criteria_ture">
     <li>
       <span style="font-size:130%" class="entry_list"><a href="/entry3/%id%/list">%title%</a></span>
@@ -206,7 +227,7 @@
   <script type="text/html" id="headline_tpl">
     <p style="font-size:150%"><b>キーワード「<font color="#ff0000">keyword</font>」を含んだコメントのあるスレッド一覧</b></p>
   </script>
-  
+
   <script type="text/html" id="words">
     <li>
       <span style="font-size:130%" class="entry_list"><a href="/entry3/%id%/list">%title%</a></span>
@@ -214,5 +235,5 @@
       <span>キーワードが含まれているコメント数-----「%count(entry.body)%」</span>
     </li>
   </script>
-  
+
 {/block}
