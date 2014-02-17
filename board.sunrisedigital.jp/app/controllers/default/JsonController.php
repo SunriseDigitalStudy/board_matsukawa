@@ -50,6 +50,11 @@ class JsonController extends Sdx_Controller_Action_Http {
             ->fetchPairs();
     $elems->setName('tag_ids')->addChildren($tag_list);
     $form->setElement($elems);
+    
+    //テキストボックス
+    $elem = new Sdx_Form_Element_Text();
+    $elem->setName('word1');
+    $form->setElement($elem);
 
     $this->view->assign('form', $form);
   }
@@ -80,6 +85,7 @@ class JsonController extends Sdx_Controller_Action_Http {
     //絞り込み条件の値(パラメータ)を取得
     $genre_id = $this->_getParam('genre_id');
     $tag_ids = $this->_getParam('tag_ids');
+    $word1 = $this->_getParam('word1');
 
     //並び順用サブクエリの作成
     //SELECT thread_id, Max(updated_at) AS updated  FROM entry GROUP BY thread_id
@@ -88,7 +94,13 @@ class JsonController extends Sdx_Controller_Action_Http {
     $select_en->resetColumns()
             ->columns('thread_id')
             ->columns('Max(updated_at) AS updated')
+            ->columns('count(entry.body) AS count')
             ->group('thread_id');
+    if($word1){
+      $word1 = mb_convert_kana($word1,'s');
+      $keyword1 = trim($word1);
+      $select_en->like('entry.body','%'.$keyword1.'%');
+    }
 
 
     //メインクエリ作成
@@ -103,10 +115,16 @@ class JsonController extends Sdx_Controller_Action_Http {
     //全件検索
     $select_th = $t_thread->getSelectWithJoin();
     $sub_Query = $select_th->expr('(' . $select_en->assemble() . ')');
+    //$word1があった時は、キーワードが存在したコメントのあるスレッドのみを表示したいので、INNER　JOINにする。
+    if($word1){
+      $select_th->joinInner(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id');
+    }else{
+      $select_th->joinLeft(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id');
+    }
     $select_th
-            ->joinLeft(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id')
-            ->setColumns(array('thread.id','title','max_updated.updated'))
+            ->setColumns(array('thread.id','title','max_updated.updated', 'max_updated.count'))
             ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC');
+    
     //タグ条件で絞込み
     if ($tag_ids) {
       $select_th
