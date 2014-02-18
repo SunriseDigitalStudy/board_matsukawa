@@ -163,52 +163,5 @@ class JsonController extends Sdx_Controller_Action_Http {
     $this->jsonResponse($json_data);
   }
   
-  public function wordsearchAction(){
-    
-    $this->_disableViewRenderer();
-    
-    /*
-     * 「SQL文」
-     * SELECT thread.id, thread.title, count(entry.body)
-     * FROM thread INNER JOIN entry ON thread.id = entry.thread_id
-     * WHERE entry.body LIKE "%任意の単語%"
-     * GROUP BY thread.id
-     * ORDER BY count(entry.body) DESC;
-     */
-    
-    $word1 = $this->_getParam('word1');
-    $word2 = $this->_getParam('word2');
-    $and_or = $this->_getParam('and_or');
-    
-    //全角スペースはtrimできないため、全角スペースを半角スペースに変換
-    $word1 = mb_convert_kana($word1,'s');
-    $word2 = mb_convert_kana($word2,'s');
-    //単語の前後にスペースがあったら削除
-    $keyword1 = trim($word1);
-    $keyword2 = trim($word2);
-    
-    $t_thread = Bd_Orm_Main_Thread::createTable();
-    $t_entry = Bd_Orm_Main_Entry::createTable();
-    
-    $t_thread->addJoinInner($t_entry);
-    
-    $select = $t_thread->getSelectWithJoin();
-    $select->setColumns(array('thread.id','thread.title','count(entry.body)' ))
-            ->like('entry.body','%'.$keyword1.'%')
-            ->group('thread.id')
-            ->order('count(entry.body) DESC');
-    if($and_or == 'and' && $keyword2 != ''){
-      $select->like('entry.body','%'.$keyword2.'%'); //AND条件
-    }
-    if($and_or == 'or' && $keyword2 != '' ){
-      $select->addOr('body', '%'.$keyword2.'%', 'entry', ' like '); //OR条件
-    }
-    
-    $thread_list = $t_thread->fetchAll($select);
-
-    $json_data = $thread_list->toArray();
-    $this->jsonResponse($json_data);
-
-  }
-
+  
 }

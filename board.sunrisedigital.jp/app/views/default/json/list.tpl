@@ -22,18 +22,6 @@
           <input class="btn btn-danger clearForm" type="button" value="リセット">
           </form>
           <br/>
-          <br/>
-          <form id="vague">
-          <input type="text" class="form-control" id="vague1" name="word1"><br/>
-          <label class="radio-inline">
-            <input type="radio" name="and_or" value="and" checked> AND
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="and_or" value="or"> OR
-          </label>
-          <input type="text" class="form-control" id="vague2" name="word2"><br/>
-          <input type="button" class="btn btn-primary search" value="コメント内容検索">
-          </form>
         </div>
       </div>
     </div>
@@ -58,7 +46,7 @@
             </thead>
             <tbody id="content">
               {*ここにajaxでスレッドリストデータを生成*}
-            </tbody>   
+            </tbody>
           </table>
         </div>
       </div>
@@ -167,52 +155,7 @@
       $(".clearForm").bind("click", function() {
         $(this.form).find(":checked").prop("checked", false);
       });
-
-
-      $('.search').on('click', function() {
-
-        $('#next').hide();
-        $('#back').hide();
-
-        //入力フォームの値を取得
-        var form = $("#vague");
-        var query = form.serialize();
-        var word1 = $("#vague1").val();
-        var word2 = $("#vague2").val();
-
-        //headlineに表示する単語(word)
-        var word = " ";
-        var and_or = $("input:radio[name='and_or']:checked").val();
-        if (and_or == 'and') {
-          word = word1 + '<font color="#000000">と</font>' + word2;
-        } else {
-          word = word1 + '<font color="#000000">または</font>' + word2;
-        }
-
-        $.ajax({
-          type: 'GET',
-          url: '/json/wordsearch',
-          data: query,
-        }).done(function(json) {
-          //表題を出力
-          $("#headline").show(); //ラジオボタン、チェックボックスでの検索時に非表示にしたものを表示する。
-          var headline_tpl = $("#headline_tpl").text().split('keyword').join(word);
-          $("#headline").html(headline_tpl);
-          //スレッドタイトルとコメントカウント数を出力
-          var tpl_html = $("#words").text();
-          var html = "";
-          $.each(json, function() {
-            var tpl_html_copy = tpl_html;  //tpl_html_copyを毎回初期化。tpl_htmlの値はいじりたくない
-            $.each(this, function(key, value) {
-              tpl_html_copy = tpl_html_copy.split("%" + key + "%").join(value);
-            });
-            html += tpl_html_copy;
-          });
-          $("#content").html(html);
-        }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-          alert('Error : ' + errorThrown);
-        });
-      });
+      
 
     });
 
@@ -235,16 +178,5 @@
     <p><img src="/img/20081221231807.jpg" alt="やる夫3"></p>
   </script>
 
-  <script type="text/html" id="headline_tpl">
-    <p style="font-size:150%"><b>キーワード「<font color="#ff0000">keyword</font>」を含んだコメントのあるスレッド一覧</b></p>
-  </script>
-
-  <script type="text/html" id="words">
-    <li>
-      <span style="font-size:130%" class="entry_list"><a href="/entry3/%id%/list">%title%</a></span>
-      &nbsp;
-      <span>キーワードが含まれているコメント数-----「%count(entry.body)%」</span>
-    </li>
-  </script>
 
 {/block}
