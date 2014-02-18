@@ -48,10 +48,18 @@
             <li class="previous"><a id="back">&larr; 前の5件</a></li>
             <li class="next"><a id="next">次の5件 &rarr;</a></li>
           </ul>
-          <p id="headline"></p>
-          <ul id="content">
-            {*ajaxでスレッドリストデータを生成*}
-          </ul>
+          <table class="table">
+            <thead>
+            <tr>
+              <th>スレッドタイトル</th>
+              <th>更新日時</th>
+              <th>コメント数</th>
+            </tr>
+            </thead>
+            <tbody id="content">
+              {*ここにajaxでスレッドリストデータを生成*}
+            </tbody>   
+          </table>
         </div>
       </div>
       <p style="font-size:200%"><img src="/img/20110224223407740.png" alt="やる夫2">自由に書き込んだらいいお</p>
@@ -122,7 +130,7 @@
               var tpl_html_copy = tpl_html;  //tpl_html_copyを毎回初期化。tpl_htmlの値はいじりたくない
               $.each(this, function(key, value) {
                 if (!value) {
-                  value = 'コメントはありません';
+                  value = '投稿がありません';
                 }
                 tpl_html_copy = tpl_html_copy.split("%" + key + "%").join(value);
               });
@@ -171,13 +179,13 @@
         var query = form.serialize();
         var word1 = $("#vague1").val();
         var word2 = $("#vague2").val();
-        
+
         //headlineに表示する単語(word)
         var word = " ";
         var and_or = $("input:radio[name='and_or']:checked").val();
-        if(and_or == 'and'){
+        if (and_or == 'and') {
           word = word1 + '<font color="#000000">と</font>' + word2;
-        }else{
+        } else {
           word = word1 + '<font color="#000000">または</font>' + word2;
         }
 
@@ -185,7 +193,6 @@
           type: 'GET',
           url: '/json/wordsearch',
           data: query,
-
         }).done(function(json) {
           //表題を出力
           $("#headline").show(); //ラジオボタン、チェックボックスでの検索時に非表示にしたものを表示する。
@@ -212,14 +219,15 @@
   </script>
 
 
-  {*HTMLテンプレート*}
+  {*--------------------HTMLテンプレート----------------------*}
+  
+  {*スレッド一覧を表示するテンプレート*}
   <script type="text/html" id="search_criteria_ture">
-    <li>
-      <span style="font-size:130%" class="entry_list"><a href="/entry3/%id%/list">%title%</a></span>
-      &nbsp;
-      %updated%<br/>
-      %count%
-    </li>
+    <tr>
+      <td><a href="/entry3/%id%/list">%title%</a></td>
+      <td>%updated%</td>
+      <td>%count%</td>
+    </tr>
   </script>
 
   <script type="text/html" id="search_criteria_false">
