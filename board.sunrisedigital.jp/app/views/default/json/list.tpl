@@ -17,7 +17,8 @@
           <h3><span class="label label-default">タグ選択</span></h3>
           {$form.tag_ids->render() nofilter}
           <h3><span class="label label-default">単語検索</span></h3>
-          {$form.word1->render() nofilter}<br/>
+          {$form.word1->addClass('form-control')->render() nofilter}<br/>
+          <br/>
           <button type="submit" class="btn btn-success"><b>検索</b><i class="glyphicon glyphicon-hand-left"></i></button>
           <input class="btn btn-danger clearForm" type="button" value="リセット">
           </form>
