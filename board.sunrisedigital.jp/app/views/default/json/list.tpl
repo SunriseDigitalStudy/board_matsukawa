@@ -154,7 +154,7 @@
        * 選択されたラジオボタン、チェックボックスのチェックをリセットする処理
        */
       $(".clearForm").bind("click", function() {
-        $(this.form).find(":checked").prop("checked", false);
+        $(this.form).find(":text").val("").end().find(":checked").prop("checked", false);
       });
       
 
