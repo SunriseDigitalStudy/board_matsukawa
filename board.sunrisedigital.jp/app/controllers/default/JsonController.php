@@ -86,6 +86,12 @@ class JsonController extends Sdx_Controller_Action_Http {
     $genre_id = $this->_getParam('genre_id');
     $tag_ids = $this->_getParam('tag_ids');
     $word1 = $this->_getParam('word1');
+    
+    //スペースを削除する。スペースのみの行は空文字になる。
+    if($word1){
+      $keyword = mb_convert_kana($word1,'s');
+      $word1 = trim($keyword);
+    }
 
     //並び順用サブクエリの作成
     //SELECT thread_id, Max(updated_at) AS updated  FROM entry GROUP BY thread_id
@@ -97,9 +103,7 @@ class JsonController extends Sdx_Controller_Action_Http {
             ->columns('count(entry.body) AS count')
             ->group('thread_id');
     if($word1){
-      $word1 = mb_convert_kana($word1,'s');
-      $keyword1 = trim($word1);
-      $select_en->like('entry.body','%'.$keyword1.'%');
+      $select_en->like('entry.body','%'.$word1.'%');
     }
 
 
