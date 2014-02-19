@@ -85,12 +85,12 @@ class JsonController extends Sdx_Controller_Action_Http {
     //絞り込み条件の値(パラメータ)を取得
     $genre_id = $this->_getParam('genre_id');
     $tag_ids = $this->_getParam('tag_ids');
-    $word1 = $this->_getParam('word1');
+    $word = $this->_getParam('word1');
     
-    //スペースを削除する。スペースのみの行は空文字になる。
-    if($word1){
-      $keyword = mb_convert_kana($word1,'s');
-      $word1 = trim($keyword);
+    //両端にスペースのある文字列で検索しないようにするために、両端のスペースを削除。スペースのみの文字列は空文字になる。
+    if($word){
+      $keyword = mb_convert_kana($word,'s');
+      $word = trim($keyword);
     }
 
     //並び順用サブクエリの作成
@@ -100,10 +100,10 @@ class JsonController extends Sdx_Controller_Action_Http {
     $select_en->resetColumns()
             ->columns('thread_id')
             ->columns('Max(updated_at) AS updated')
-            ->columns('count(entry.body) AS count')
+            ->columns('count(entry.body) AS comment_count')
             ->group('thread_id');
-    if($word1){
-      $select_en->like('entry.body','%'.$word1.'%');
+    if($word){
+      $select_en->like('entry.body','%'.$word.'%');
     }
 
 
@@ -119,14 +119,14 @@ class JsonController extends Sdx_Controller_Action_Http {
     //全件検索
     $select_th = $t_thread->getSelectWithJoin();
     $sub_Query = $select_th->expr('(' . $select_en->assemble() . ')');
-    //$word1があった時は、キーワードが存在したコメントのあるスレッドのみを表示したいので、INNER　JOINにする。
-    if($word1){
+    //$wordがあった時は、キーワードが含まれるコメントがあるスレッドのみを表示したいので、INNER　JOINにする。
+    if($word){
       $select_th->joinInner(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id');
     }else{
       $select_th->joinLeft(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id');
     }
     $select_th
-            ->setColumns(array('thread.id','title','max_updated.updated', 'max_updated.count'))
+            ->setColumns(array('thread.id','title','max_updated.updated', 'max_updated.comment_count'))
             ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC');
     
     //タグ条件で絞込み

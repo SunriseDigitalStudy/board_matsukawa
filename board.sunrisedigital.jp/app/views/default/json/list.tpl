@@ -74,7 +74,6 @@
       $('#form1').submit(function(event) {
         //submitイベントを無効化
         event.preventDefault();
-        $("#headline").hide();
         //変数firstPageはレキシカル変数
         ajax(firstPage);
       });
@@ -170,7 +169,7 @@
     <tr>
       <td><a href="/entry3/%id%/list">%title%</a></td>
       <td>%updated%</td>
-      <td>%count%</td>
+      <td>%comment_count%</td>
     </tr>
   </script>
 
