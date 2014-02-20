@@ -119,15 +119,14 @@ class JsonController extends Sdx_Controller_Action_Http {
     //全件検索
     $select_th = $t_thread->getSelectWithJoin();
     $sub_Query = $select_th->expr('(' . $select_en->assemble() . ')');
-    //$wordがあった時は、キーワードが含まれるコメントがあるスレッドのみを表示したいので、INNER　JOINにする。
+
+    $select_th->joinLeft(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id')
+              ->setColumns(array('thread.id','title','max_updated.updated', 'max_updated.comment_count'))
+              ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC');
     if($word){
-      $select_th->joinInner(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id');
-    }else{
-      $select_th->joinLeft(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id');
+      //$wordがあった時は、キーワードが含まれるコメントがあるスレッドのみを表示
+      $select_th->like('max_updated.comment_count', '%%');
     }
-    $select_th
-            ->setColumns(array('thread.id','title','max_updated.updated', 'max_updated.comment_count'))
-            ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC');
     
     //タグ条件で絞込み
     if ($tag_ids) {
