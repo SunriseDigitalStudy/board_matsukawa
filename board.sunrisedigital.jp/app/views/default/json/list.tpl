@@ -16,9 +16,13 @@
           {$form.genre_id->setDefaultEmptyChild('何も選択しない')->render() nofilter}
           <h3><span class="label label-default">タグ選択</span></h3>
           {$form.tag_ids->render() nofilter}
+          <h3><span class="label label-default">単語検索</span></h3>
+          {$form.word1->addClass('form-control')->render() nofilter}<br/>
+          <br/>
           <button type="submit" class="btn btn-success"><b>検索</b><i class="glyphicon glyphicon-hand-left"></i></button>
           <input class="btn btn-danger clearForm" type="button" value="リセット">
           </form>
+          <br/>
         </div>
       </div>
     </div>
@@ -33,9 +37,18 @@
             <li class="previous"><a id="back">&larr; 前の5件</a></li>
             <li class="next"><a id="next">次の5件 &rarr;</a></li>
           </ul>
-          <ul id="content">
-            {*ajaxでスレッドリストデータを生成*}
-          </ul>
+          <table class="table">
+            <thead>
+            <tr>
+              <th>スレッドタイトル</th>
+              <th>更新日時</th>
+              <th>コメント数</th>
+            </tr>
+            </thead>
+            <tbody id="content">
+              {*ここにajaxでスレッドリストデータを生成*}
+            </tbody>
+          </table>
         </div>
       </div>
       <p style="font-size:200%"><img src="/img/20110224223407740.png" alt="やる夫2">自由に書き込んだらいいお</p>
@@ -48,6 +61,7 @@
 {block js}
   <script>
     $(function() {
+
       //前の5件を表示するボタンは、1ページ目では使う必要がないので、はじめに非表示にする。
       $('#back').hide();
 
@@ -76,7 +90,7 @@
           url: "/json/search",
           data: form_val,
           dataType: "json"
-          
+
         }).done(function(json) {
 
           //ページングデータをdata Attributes(独自データ属性)に格納する
@@ -104,11 +118,11 @@
               var tpl_html_copy = tpl_html;  //tpl_html_copyを毎回初期化。tpl_htmlの値はいじりたくない
               $.each(this, function(key, value) {
                 if (!value) {
-                  value = 'コメントはありません';
+                  value = '投稿がありません';
                 }
                 tpl_html_copy = tpl_html_copy.split("%" + key + "%").join(value);
               });
-              html += tpl_html_copy;
+              html += tpl_html_copy; //まとめて出力するために、テンプレートを連結。
             });
             $("#content").html(html);
           } else {
@@ -139,28 +153,30 @@
        * 選択されたラジオボタン、チェックボックスのチェックをリセットする処理
        */
       $(".clearForm").bind("click", function() {
-        $(this.form).find(":checked").prop("checked", false);
+        $(this.form).find(":text").val("").end().find(":checked").prop("checked", false);
       });
+      
 
     });
 
   </script>
 
 
-
+  {*--------------------HTMLテンプレート----------------------*}
+  
+  {*スレッド一覧を表示するテンプレート*}
   <script type="text/html" id="search_criteria_ture">
-    <li>
-      <span style="font-size:130%" class="entry_list"><a href="/entry3/%id%/list">%title%</a></span>
-      &nbsp;
-      %updated%
-    </li>
+    <tr>
+      <td><a href="/entry3/%id%/list">%title%</a></td>
+      <td>%updated%</td>
+      <td>%comment_count%</td>
+    </tr>
   </script>
 
   <script type="text/html" id="search_criteria_false">
     <p style="font-size:200%">検索条件に一致するスレッドはありません</p><br/>
     <p><img src="/img/20081221231807.jpg" alt="やる夫3"></p>
   </script>
-
 
 
 {/block}

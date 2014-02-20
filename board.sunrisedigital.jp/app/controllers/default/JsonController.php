@@ -50,6 +50,11 @@ class JsonController extends Sdx_Controller_Action_Http {
             ->fetchPairs();
     $elems->setName('tag_ids')->addChildren($tag_list);
     $form->setElement($elems);
+    
+    //テキストボックス
+    $elem = new Sdx_Form_Element_Text();
+    $elem->setName('word1');
+    $form->setElement($elem);
 
     $this->view->assign('form', $form);
   }
@@ -80,6 +85,13 @@ class JsonController extends Sdx_Controller_Action_Http {
     //絞り込み条件の値(パラメータ)を取得
     $genre_id = $this->_getParam('genre_id');
     $tag_ids = $this->_getParam('tag_ids');
+    $word = $this->_getParam('word1');
+    
+    //両端にスペースのある文字列で検索しないようにするために、両端のスペースを削除。スペースのみの文字列は空文字になる。
+    if($word){
+      $keyword = mb_convert_kana($word,'s');
+      $word = trim($keyword);
+    }
 
     //並び順用サブクエリの作成
     //SELECT thread_id, Max(updated_at) AS updated  FROM entry GROUP BY thread_id
@@ -88,7 +100,11 @@ class JsonController extends Sdx_Controller_Action_Http {
     $select_en->resetColumns()
             ->columns('thread_id')
             ->columns('Max(updated_at) AS updated')
+            ->columns('count(entry.body) AS comment_count')
             ->group('thread_id');
+    if($word){
+      $select_en->like('entry.body','%'.$word.'%');
+    }
 
 
     //メインクエリ作成
@@ -103,10 +119,16 @@ class JsonController extends Sdx_Controller_Action_Http {
     //全件検索
     $select_th = $t_thread->getSelectWithJoin();
     $sub_Query = $select_th->expr('(' . $select_en->assemble() . ')');
+    //$wordがあった時は、キーワードが含まれるコメントがあるスレッドのみを表示したいので、INNER　JOINにする。
+    if($word){
+      $select_th->joinInner(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id');
+    }else{
+      $select_th->joinLeft(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id');
+    }
     $select_th
-            ->joinLeft(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id')
-            ->setColumns(array('thread.id','title','max_updated.updated'))
+            ->setColumns(array('thread.id','title','max_updated.updated', 'max_updated.comment_count'))
             ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC');
+    
     //タグ条件で絞込み
     if ($tag_ids) {
       $select_th
@@ -144,5 +166,6 @@ class JsonController extends Sdx_Controller_Action_Http {
     
     $this->jsonResponse($json_data);
   }
-
+  
+  
 }
