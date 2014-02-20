@@ -82,17 +82,6 @@ class JsonController extends Sdx_Controller_Action_Http {
      * 複合条件検索のSQLをORMで作成
      */
 
-    //絞り込み条件の値(パラメータ)を取得
-    $genre_id = $this->_getParam('genre_id');
-    $tag_ids = $this->_getParam('tag_ids');
-    $word = $this->_getParam('word1');
-    
-    //両端にスペースのある文字列で検索しないようにするために、両端のスペースを削除。スペースのみの文字列は空文字になる。
-    if($word){
-      $keyword = mb_convert_kana($word,'s');
-      $word = trim($keyword);
-    }
-
     //並び順用サブクエリの作成
     //SELECT thread_id, Max(updated_at) AS updated  FROM entry GROUP BY thread_id
     $t_entry = Bd_Orm_Main_Entry::createTable();
@@ -102,7 +91,9 @@ class JsonController extends Sdx_Controller_Action_Http {
             ->columns('Max(updated_at) AS updated')
             ->columns('count(entry.body) AS comment_count')
             ->group('thread_id');
-    if($word){
+    if($word = $this->_getParam('word1')){
+      //両端にスペースのある文字列で検索しないようにするために、両端のスペースを削除。スペースのみの文字列は空文字になる。
+      $word = trim(mb_convert_kana($word,'s'));
       $select_en->like('entry.body','%'.$word.'%');
     }
 
@@ -129,6 +120,7 @@ class JsonController extends Sdx_Controller_Action_Http {
     }
     
     //タグ条件で絞込み
+    $tag_ids = $this->_getParam('tag_ids');
     if ($tag_ids) {
       $select_th
               ->add('thread_tag.tag_id', $tag_ids)
@@ -136,6 +128,7 @@ class JsonController extends Sdx_Controller_Action_Http {
               ->having('COUNT(tag_id) =' . count($tag_ids));
     }
     //ジャンル条件で絞込み
+    $genre_id = $this->_getParam('genre_id');
     if ($genre_id) {
       $select_th
               ->add('genre_id', $genre_id);
