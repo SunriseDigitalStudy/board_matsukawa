@@ -91,7 +91,9 @@ $(function() {
        * 選択されたラジオボタン、チェックボックスのチェックをリセットする処理
        */
       $(".clearForm").bind("click", function() {
-        $(this.form).find(":text").val("").end().find(":checked").prop("checked", false);
+        var form = $(this.form);
+        form.find(":text").val("");
+        form.find(":checked").prop("checked", false);
       });
       
 

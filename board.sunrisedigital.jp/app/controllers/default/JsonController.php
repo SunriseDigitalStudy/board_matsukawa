@@ -91,6 +91,7 @@ class JsonController extends Sdx_Controller_Action_Http {
             ->columns('Max(updated_at) AS updated')
             ->columns('count(entry.body) AS comment_count')
             ->group('thread_id');
+    
     if($word = $this->_getParam('word1')){
       //両端にスペースのある文字列で検索しないようにするために、両端のスペースを削除。スペースのみの文字列は空文字になる。
       $word = trim(mb_convert_kana($word,'s'));
