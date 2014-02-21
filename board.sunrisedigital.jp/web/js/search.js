@@ -2,6 +2,8 @@ $(function() {
 
       //前の5件を表示するボタンは、1ページ目では使う必要がないので、はじめに非表示にする。
       $('#back').hide();
+      //検索ボタンを無効化
+      $("button#search").prop("disabled",true);
 
       var firstPage = 1; //表示するページのナンバー
       ajax(firstPage);
@@ -12,6 +14,7 @@ $(function() {
       $('#form1').submit(function(event) {
         //submitイベントを無効化
         event.preventDefault();
+        $("button#search").prop("disabled",true);
         //変数firstPageはレキシカル変数
         ajax(firstPage);
       });
@@ -74,6 +77,9 @@ $(function() {
             var tpl_html = $("#search_criteria_false").text();
             $("#content").html(tpl_html);
           }
+          
+          //検索ボタンを有効化
+          $("button#search").prop("disabled",false);
 
         }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
           alert('Error : ' + errorThrown);

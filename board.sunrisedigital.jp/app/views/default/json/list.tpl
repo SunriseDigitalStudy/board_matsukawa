@@ -20,7 +20,7 @@
           {$form.word1->addClass('form-control')->render() nofilter}<br/>
           <p style="color:red">↑キーワードを含むコメントがあるスレッドを検索します</p>
           <br/>
-          <button type="submit" class="btn btn-success"><b>検索</b><i class="glyphicon glyphicon-hand-left"></i></button>
+          <button type="submit" class="btn btn-success" id="search"><b>検索</b><i class="glyphicon glyphicon-hand-left"></i></button>
           <input class="btn btn-danger clearForm" type="button" value="リセット">
           </form>
           <br/>
