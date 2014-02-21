@@ -103,6 +103,7 @@ class JsonController extends Sdx_Controller_Action_Http {
     $t_thread = Bd_Orm_Main_Thread::createTable();
 
     //タグ条件絞り込み検索のためのテーブル生成＆join
+    $tag_ids = $this->_getParam('tag_ids');
     if ($tag_ids) {
       $t_thread_tag = Bd_Orm_Main_ThreadTag::createTable();
       $t_thread->addJoinLeft($t_thread_tag);
@@ -116,12 +117,13 @@ class JsonController extends Sdx_Controller_Action_Http {
               ->setColumns(array('thread.id','title','max_updated.updated', 'max_updated.comment_count'))
               ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC');
     if($word){
-      //$wordがあった時は、キーワードが含まれるコメントがあるスレッドのみを表示
-      $select_th->like('max_updated.comment_count', '%%');
+      //$wordがあった時は、キーワードを含むコメントがあるスレッドのみを表示
+      //LEFT JOINしているため、コメントがないスレッドはcomment_countカラムの値がnullになっている。
+      //なので、comment_countカラムの値がnull以外のものを抽出すれば、キーワードを含むコメントがあるスレッドのみを表示できる。
+      $select_th->isNotNull('max_updated.comment_count');
     }
     
     //タグ条件で絞込み
-    $tag_ids = $this->_getParam('tag_ids');
     if ($tag_ids) {
       $select_th
               ->add('thread_tag.tag_id', $tag_ids)
