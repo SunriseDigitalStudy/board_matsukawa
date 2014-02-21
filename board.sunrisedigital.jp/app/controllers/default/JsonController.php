@@ -154,6 +154,7 @@ class JsonController extends Sdx_Controller_Action_Http {
      */
     $json_data = array(
                   'thread_list' => $thread_list->toArray(), //データを配列に変換
+                  'keyword' => $word,
                   'page' => array(  //ページングデータ
                               'next_page' => $sdx_pager->getNextPageId(), 
                               'prev_page' => $sdx_pager->getPrevPageId())

@@ -47,6 +47,13 @@ $(function() {
           } else {
             $('#back').hide();
           }
+          
+          //あいまい検索してたら、テーブルヘッダの表記を変更
+          if(json['keyword']){
+            $("th#comment").html("キーワードを含む<br/>コメントの数");
+          }else{
+            $("th#comment").html("コメント数");
+          }
 
           //取得したjsonデータをHTMLにレンダリングして出力
           if (json['thread_list'].length >= 1) {
