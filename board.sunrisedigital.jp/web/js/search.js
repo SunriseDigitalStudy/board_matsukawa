@@ -21,6 +21,10 @@ $(function() {
 
 
   function ajax(page) {
+    
+    //通信中はクリックイベントを無効
+    $('#next').off();
+    $('#back').off();
 
     //thを隠す
     $("thead").hide();
@@ -84,6 +88,18 @@ $(function() {
         var tpl_html = $("#search_criteria_false").text();
         $("tbody").html(tpl_html);
       }
+      
+      //前の件数を表示するイベント
+      $('#back').on('click', function() {
+        var prevPage = Number($("#pager").data("prev-page"));
+        ajax(prevPage);
+      });
+
+      //次の件数を表示するイベント
+      $('#next').on('click', function() {
+        var nextPage = Number($("#pager").data("next-page"));
+        ajax(nextPage);
+      });
 
       //検索ボタンを有効化
       $("button#search").prop("disabled", false);
@@ -93,18 +109,6 @@ $(function() {
     });
 
   }
-
-  //次の件数を表示
-  $('#next').click(function() {
-    var nextPage = Number($("#pager").data("next-page"));
-    ajax(nextPage);
-  });
-
-  //前の件数を表示
-  $('#back').click(function() {
-    var prevPage = Number($("#pager").data("prev-page"));
-    ajax(prevPage);
-  });
 
 
   /*
