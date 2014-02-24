@@ -21,6 +21,12 @@ $(function() {
 
 
       function ajax(page) {
+        
+        //thを隠す
+        $("thead").hide();
+        //ローディング画像表示
+        $("#content").html("<img src='/img/image_607975.gif' style='display:block; margin:auto;'/>");
+        
         //送る値ををクエリ文字列に変換
         var $form = $("#form1");
         var form_val = $form.serialize();
@@ -57,7 +63,10 @@ $(function() {
           }else{
             $("th#comment").html("コメント数");
           }
-
+          
+          //thを表示
+          $("thead").show();
+          
           //取得したjsonデータをHTMLにレンダリングして出力
           if (json['thread_list'].length >= 1) {
             var tpl_html = $("#search_criteria_ture").text();
@@ -80,6 +89,7 @@ $(function() {
           
           //検索ボタンを有効化
           $("button#search").prop("disabled",false);
+          
 
         }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
           alert('Error : ' + errorThrown);
