@@ -63,12 +63,10 @@ $(function() {
           }else{
             $("th#comment").html("コメント数");
           }
-          
-          //thを表示
-          $("thead").show();
-          
+
           //取得したjsonデータをHTMLにレンダリングして出力
           if (json['thread_list'].length >= 1) {
+            $("thead").show();  //thを表示
             var tpl_html = $("#search_criteria_ture").text();
             var html = "";
             $.each(json['thread_list'], function() {
@@ -89,7 +87,6 @@ $(function() {
           
           //検索ボタンを有効化
           $("button#search").prop("disabled",false);
-          
 
         }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
           alert('Error : ' + errorThrown);
