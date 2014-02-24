@@ -25,7 +25,7 @@ $(function() {
         //thを隠す
         $("thead").hide();
         //ローディング画像表示
-        $("#content").html("<img src='/img/image_607975.gif' style='display:block; margin:auto;'/>");
+        $("tbody").html("<img src='/img/image_607975.gif' style='display:block; margin:auto;'/>");
         
         //送る値ををクエリ文字列に変換
         var $form = $("#form1");
@@ -81,10 +81,10 @@ $(function() {
               });
               html += tpl_html_copy; //まとめて出力するために、テンプレートを連結。
             });
-            $("#content").html(html);
+            $("tbody").html(html);
           } else {
             var tpl_html = $("#search_criteria_false").text();
-            $("#content").html(tpl_html);
+            $("tbody").html(tpl_html);
           }
           
           //検索ボタンを有効化

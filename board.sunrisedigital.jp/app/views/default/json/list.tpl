@@ -46,7 +46,7 @@
               <th id="comment">コメント数</th>
             </tr>
             </thead>
-            <tbody id="content">
+            <tbody>
               {*ここにajaxでスレッドリストデータを生成*}
             </tbody>
           </table>
