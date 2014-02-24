@@ -82,17 +82,6 @@ class JsonController extends Sdx_Controller_Action_Http {
      * 複合条件検索のSQLをORMで作成
      */
 
-    //絞り込み条件の値(パラメータ)を取得
-    $genre_id = $this->_getParam('genre_id');
-    $tag_ids = $this->_getParam('tag_ids');
-    $word = $this->_getParam('word1');
-    
-    //両端にスペースのある文字列で検索しないようにするために、両端のスペースを削除。スペースのみの文字列は空文字になる。
-    if($word){
-      $keyword = mb_convert_kana($word,'s');
-      $word = trim($keyword);
-    }
-
     //並び順用サブクエリの作成
     //SELECT thread_id, Max(updated_at) AS updated  FROM entry GROUP BY thread_id
     $t_entry = Bd_Orm_Main_Entry::createTable();
@@ -102,7 +91,10 @@ class JsonController extends Sdx_Controller_Action_Http {
             ->columns('Max(updated_at) AS updated')
             ->columns('count(entry.body) AS comment_count')
             ->group('thread_id');
-    if($word){
+    
+    if($word = $this->_getParam('word1')){
+      //両端にスペースのある文字列で検索しないようにするために、両端のスペースを削除。スペースのみの文字列は空文字になる。
+      $word = trim(mb_convert_kana($word,'s'));
       $select_en->like('entry.body','%'.$word.'%');
     }
 
@@ -111,6 +103,7 @@ class JsonController extends Sdx_Controller_Action_Http {
     $t_thread = Bd_Orm_Main_Thread::createTable();
 
     //タグ条件絞り込み検索のためのテーブル生成＆join
+    $tag_ids = $this->_getParam('tag_ids');
     if ($tag_ids) {
       $t_thread_tag = Bd_Orm_Main_ThreadTag::createTable();
       $t_thread->addJoinLeft($t_thread_tag);
@@ -119,15 +112,16 @@ class JsonController extends Sdx_Controller_Action_Http {
     //全件検索
     $select_th = $t_thread->getSelectWithJoin();
     $sub_Query = $select_th->expr('(' . $select_en->assemble() . ')');
-    //$wordがあった時は、キーワードが含まれるコメントがあるスレッドのみを表示したいので、INNER　JOINにする。
+
+    $select_th->joinLeft(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id')
+              ->setColumns(array('thread.id','title','max_updated.updated', 'max_updated.comment_count'))
+              ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC');
     if($word){
-      $select_th->joinInner(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id');
-    }else{
-      $select_th->joinLeft(array('max_updated' => $sub_Query), 'thread.id = max_updated.thread_id');
+      //$wordがあった時は、キーワードを含むコメントがあるスレッドのみを表示
+      //LEFT JOINしているため、コメントがないスレッドはcomment_countカラムの値がnullになっている。
+      //なので、comment_countカラムの値がnull以外のものを抽出すれば、キーワードを含むコメントがあるスレッドのみを表示できる。
+      $select_th->isNotNull('max_updated.comment_count');
     }
-    $select_th
-            ->setColumns(array('thread.id','title','max_updated.updated', 'max_updated.comment_count'))
-            ->order('(CASE WHEN updated is null THEN 1 ELSE 2 END), updated DESC');
     
     //タグ条件で絞込み
     if ($tag_ids) {
@@ -137,6 +131,7 @@ class JsonController extends Sdx_Controller_Action_Http {
               ->having('COUNT(tag_id) =' . count($tag_ids));
     }
     //ジャンル条件で絞込み
+    $genre_id = $this->_getParam('genre_id');
     if ($genre_id) {
       $select_th
               ->add('genre_id', $genre_id);
