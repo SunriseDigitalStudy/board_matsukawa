@@ -16,10 +16,11 @@
           {$form.genre_id->setDefaultEmptyChild('何も選択しない')->render() nofilter}
           <h3><span class="label label-default">タグ選択</span></h3>
           {$form.tag_ids->render() nofilter}
-          <h3><span class="label label-default">単語検索</span></h3>
+          <h3><span class="label label-default">キーワード検索</span></h3>
           {$form.word1->addClass('form-control')->render() nofilter}<br/>
+          <p style="color:red">↑キーワードを含むコメントがあるスレッドを検索します</p>
           <br/>
-          <button type="submit" class="btn btn-success"><b>検索</b><i class="glyphicon glyphicon-hand-left"></i></button>
+          <button type="submit" class="btn btn-success" id="search"><b>検索</b><i class="glyphicon glyphicon-hand-left"></i></button>
           <input class="btn btn-danger clearForm" type="button" value="リセット">
           </form>
           <br/>
@@ -42,10 +43,10 @@
             <tr>
               <th>スレッドタイトル</th>
               <th>更新日時</th>
-              <th>コメント数</th>
+              <th id="comment">コメント数</th>
             </tr>
             </thead>
-            <tbody id="content">
+            <tbody>
               {*ここにajaxでスレッドリストデータを生成*}
             </tbody>
           </table>
@@ -64,7 +65,7 @@
   {*--------------------HTMLテンプレート----------------------*}
   
   {*スレッド一覧を表示するテンプレート*}
-  <script type="text/html" id="search_criteria_ture">
+  <script type="text/html" id="search_criteria_true">
     <tr>
       <td><a href="/entry3/%id%/list">%title%</a></td>
       <td>%updated%</td>
