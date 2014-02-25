@@ -2,8 +2,6 @@ $(function() {
 
   //前の5件を表示するボタンは、1ページ目では使う必要がないので、はじめに非表示にする。
   $('#back').hide();
-  //検索ボタンを無効化
-  $("button#search").prop("disabled", true);
 
   var firstPage = 1; //表示するページのナンバー
   ajax(firstPage);
@@ -11,13 +9,7 @@ $(function() {
   /*
    *検索ボタンクリックアクション
    */
-  $('#form1').submit(function(event) {
-    //submitイベントを無効化
-    event.preventDefault();
-    $("button#search").prop("disabled", true);
-    //変数firstPageはレキシカル変数
-    ajax(firstPage);
-  });
+  
 
 
   function ajax(page) {
@@ -25,6 +17,7 @@ $(function() {
     //通信中はクリックイベントを無効
     $('#next').off();
     $('#back').off();
+    $('#form1').off();
 
     //thを隠す
     $("thead").hide();
@@ -101,8 +94,13 @@ $(function() {
         ajax(nextPage);
       });
 
-      //検索ボタンを有効化
-      $("button#search").prop("disabled", false);
+      //検索ボタンのクリックイベント
+      $('#form1').submit(function(event) {
+        //submitイベントを無効化
+        event.preventDefault();
+        //変数firstPageはレキシカル変数
+        ajax(firstPage);
+      });
 
     }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
       alert('Error : ' + errorThrown);
