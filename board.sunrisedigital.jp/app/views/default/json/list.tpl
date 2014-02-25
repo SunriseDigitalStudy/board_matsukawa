@@ -65,7 +65,7 @@
   {*--------------------HTMLテンプレート----------------------*}
   
   {*スレッド一覧を表示するテンプレート*}
-  <script type="text/html" id="search_criteria_ture">
+  <script type="text/html" id="search_criteria_true">
     <tr>
       <td><a href="/entry3/%id%/list">%title%</a></td>
       <td>%updated%</td>

@@ -71,7 +71,7 @@ $(function() {
       //取得したjsonデータをHTMLにレンダリングして出力
       if (json['thread_list'].length >= 1) {
         $("thead").show();  //thを表示
-        var tpl_html = $("#search_criteria_ture").text();
+        var tpl_html = $("#search_criteria_true").text();
         var html = "";
         $.each(json['thread_list'], function() {
           var tpl_html_copy = tpl_html;  //tpl_html_copyを毎回初期化。tpl_htmlの値はいじりたくない
